@@ -263,3 +263,4 @@
 253. HTML5+CSS3小实例：创意的五边形翻转loading动画
 254. HTML5+CSS3+JS小实例：带缩略图的焦点图
 255. HTML5+CSS3+JS小实例：可变字体动画
+256. HTML5+CSS3+JS小实例：全屏滚动
