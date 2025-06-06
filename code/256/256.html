@@ -1,174 +1,176 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>全屏滚动</title>
-    <style>
-      * {
-        padding: 0;
-        margin: 0;
-      }
 
-      html,
-      body {
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>全屏滚动</title>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
 
-      .container {
-        width: 100%;
-        height: 500%;
-        position: absolute;
-        top: 0;
-        transition: all 0.3s ease;
-      }
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
 
-      .section1 {
-        background-color: rebeccapurple;
-        /* background: url(./轮播图/img/01.jpg); */
-      }
+    .container {
+      width: 100%;
+      height: 500%;
+      position: absolute;
+      top: 0;
+      transition: all 0.3s ease;
+    }
 
-      .section2 {
-        background-color: skyblue;
-        /* background: url(./轮播图/img/02.jpg); */
-      }
+    .section1 {
+      background-color: rebeccapurple;
+      /* background: url(./轮播图/img/01.jpg); */
+    }
 
-      .section3 {
-        background-color: red;
-        /* background: url(./轮播图/img/03.jpg); */
-      }
+    .section2 {
+      background-color: skyblue;
+      /* background: url(./轮播图/img/02.jpg); */
+    }
 
-      .section4 {
-        background-color: orange;
-        /* background: url(./轮播图/img/04.jpg); */
-      }
+    .section3 {
+      background-color: red;
+      /* background: url(./轮播图/img/03.jpg); */
+    }
 
-      .section5 {
-        background-color: lightgreen;
-        /* background: url(./轮播图/img/05.jpg); */
-      }
+    .section4 {
+      background-color: orange;
+      /* background: url(./轮播图/img/04.jpg); */
+    }
 
-      .section {
-        width: 100%;
-        height: 20%;
-        display: flex;
-        color: white;
-        justify-content: center;
-        align-items: center;
-        background-size: cover;
-      }
+    .section5 {
+      background-color: lightgreen;
+      /* background: url(./轮播图/img/05.jpg); */
+    }
 
-      .controls {
-        position: absolute;
-        top: 50%;
-        right: 20px;
-        transform: translateY(-50%);
-        list-style: none;
-      }
+    .section {
+      width: 100%;
+      height: 20%;
+      display: flex;
+      color: white;
+      justify-content: center;
+      align-items: center;
+      background-size: cover;
+    }
 
-      .controls li {
-        width: 50px;
-        height: 50px;
-        font: bold 22px/50px "宋体";
-        text-align: center;
-        background-color: #000;
-        color: white;
-        cursor: pointer;
-        border-radius: 50%;
-      }
+    .controls {
+      position: absolute;
+      top: 50%;
+      right: 20px;
+      transform: translateY(-50%);
+      list-style: none;
+    }
 
-      .controls li + li {
-        margin-top: 5px;
-      }
+    .controls li {
+      width: 50px;
+      height: 50px;
+      font: bold 22px/50px "宋体";
+      text-align: center;
+      background-color: #000;
+      color: white;
+      cursor: pointer;
+      border-radius: 50%;
+    }
 
-      .controls li.active {
-        background-color: #fff;
-        color: red;
-      }
-    </style>
-  </head>
+    .controls li+li {
+      margin-top: 5px;
+    }
 
-  <body>
-    <div class="container">
-      <div class="section section1">
-        <h1>第1屏</h1>
-      </div>
-      <div class="section section2">
-        <h1>第2屏</h1>
-      </div>
-      <div class="section section3">
-        <h1>第3屏</h1>
-      </div>
-      <div class="section section4">
-        <h1>第4屏</h1>
-      </div>
-      <div class="section section5">
-        <h1>第5屏</h1>
-      </div>
+    .controls li.active {
+      background-color: #fff;
+      color: red;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="section section1">
+      <h1>第1屏</h1>
     </div>
+    <div class="section section2">
+      <h1>第2屏</h1>
+    </div>
+    <div class="section section3">
+      <h1>第3屏</h1>
+    </div>
+    <div class="section section4">
+      <h1>第4屏</h1>
+    </div>
+    <div class="section section5">
+      <h1>第5屏</h1>
+    </div>
+  </div>
 
-    <ul class="controls">
-      <li class="active">1</li>
-      <li>2</li>
-      <li>3</li>
-      <li>4</li>
-      <li>5</li>
-    </ul>
+  <ul class="controls">
+    <li class="active">1</li>
+    <li>2</li>
+    <li>3</li>
+    <li>4</li>
+    <li>5</li>
+  </ul>
 
-    <script>
-      //实现滚动效果
-      const container = document.querySelector(".container");
-      const lis = document.querySelectorAll(".controls li");
-      var viewHeight = null; //声明页面高度
+  <script>
+    const container = document.querySelector(".container");
+    const lis = document.querySelectorAll(".controls li");
 
-      var index = 0; //当前索引
-      var flag = true; //节流开关
-      document.addEventListener("mousewheel", function (e) {
-        e = e || window.event;
-        console.log(e);
-        // 获取整屏的高度
-        viewHeight = document.body.clientHeight;
-        if (flag) {
-          //节流阀
-          flag = false;
-          if (e.wheelDelta > 0) {
-            index--;
-            if (index < 0) {
-              index = 0;
-            }
-          } else {
-            index++;
-            if (index > lis.length - 1) {
-              index = lis.length - 1;
-            }
-          }
-          container.style.top = -index * viewHeight + "px";
-          changeColor(index);
-          setTimeout(function () {
-            flag = true;
-          }, 500);
-        }
+    let viewHeight = window.innerHeight || document.documentElement.clientHeight;
+    let index = 0;
+    let flag = true;
+
+    function changeColor(index) {
+      lis.forEach((li, i) => {
+        li.className = i === index ? "active" : "";
       });
+    }
 
-      //绑定点击事件
-      for (let i = 0; i < lis.length; i++) {
-        lis[i].onclick = function () {
-          viewHeight = document.body.clientHeight;
-          index = i;
-          changeColor(index);
-          container.style.top = -index * viewHeight + "px";
-        };
+    document.addEventListener("wheel", function (e) {
+      if (!flag) return;
+      flag = false;
+
+      viewHeight = window.innerHeight || document.documentElement.clientHeight;
+
+      if (e.deltaY < 0) {
+        index--;
+        if (index < 0) index = 0;
+      } else {
+        index++;
+        if (index >= lis.length) index = lis.length - 1;
       }
-      //改变小li颜色
-      function changeColor(index) {
-        for (var j = 0; j < lis.length; j++) {
-          lis[j].className = "";
-        }
-        lis[index].className = "active";
-      }
-    </script>
-  </body>
+
+      container.style.top = -index * viewHeight + "px";
+      changeColor(index);
+
+      setTimeout(() => {
+        flag = true;
+      }, 300);
+    });
+
+    // 点击导航点跳转
+    lis.forEach((li, i) => {
+      li.addEventListener("click", () => {
+        index = i;
+        changeColor(index);
+        viewHeight = window.innerHeight || document.documentElement.clientHeight;
+        container.style.top = -index * viewHeight + "px";
+      });
+    });
+
+    // 自适应窗口大小变化
+    window.addEventListener("resize", () => {
+      viewHeight = window.innerHeight || document.documentElement.clientHeight;
+      container.style.top = -index * viewHeight + "px";
+    });
+  </script>
+</body>
+
 </html>
