@@ -1,0 +1,21 @@
+*{
+    /* 初始化取消页面元素的内外标签 */
+    margin: 0;
+    padding: 0;
+}
+body{
+    /*100%窗口高度*/
+    height: 100vh;
+    /* 背景渐变 */
+    background: linear-gradient(200deg,#6f9de8,#00c6fb);
+}
+#plane{
+    color: #ffffff;
+    font-size: 70px;
+    /*绝对定位*/
+    position: absolute;
+    /* 弹性布局 水平 垂直 居中*/
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

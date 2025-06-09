@@ -1,0 +1,97 @@
+* {
+  /* 初始化取消页面元素的内外标签 */
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 100vh;
+  /*background-position属性设置背景图像的起始位置。*/
+  /*设置如何平铺对象的 background-image 属性。*/
+  /*background-image 不会重复*/
+  background: url("./346.jpeg") no-repeat center;
+  /*background-size属性指定背景图片大小。*/
+  /*cover	此时会保持图像的纵横比并将图像缩放成将完全覆盖背景定位区域的最小大小。*/
+  background-size: cover;
+  overflow: hidden;
+}
+.login-box {
+  /*position: relative;*/
+  /*top: 50%;*/
+  /*left: 50%;*/
+  display: flex;
+  justify-content: center;
+  align-content: space-around;
+  flex-wrap: wrap;
+  width: 600px;
+  height: 400px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border: 10px;
+  padding: 20px 50px;
+  border-radius: 20px;
+}
+.login-box h1 {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 30px;
+}
+.login-box .input-box {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  transform: translateY(-35px);
+}
+.login-box .input-box .input-text {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.login-box .input-box .input-text span {
+  color: #ffffff;
+  font-size: 18px;
+  margin-top: 20px;
+}
+.login-box .input-box .input-text input {
+  border: 0;
+  padding: 6px;
+  border-bottom: 1px solid white;
+  background-color: #ffffff00;
+  color: #ffffff;
+  margin-top: 20px;
+}
+.login-box .input-box .input-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 25px;
+  width: 145px;
+  height: 25px;
+  color: #ffffff;
+  background: linear-gradient(120deg, #a6c0fe 0%, #f68084 100%);
+  border-radius: 25px;
+  cursor: pointer;
+}
+.login-box .input-box .sign-up {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+  color: white;
+  font-size: 15px;
+  /*pointer-events 属性定义元素是否对指针事件做出反应*/
+  /*none	元素不对指针事件做出反应。*/
+  /*pointer-events: none;*/
+}
+.login-box .input-box .sign-up a {
+  color: #3489db;
+  text-decoration: none;
+  /*定义鼠标箭头样式为手形光标*/
+  cursor: pointer;
+}
