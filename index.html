@@ -1,539 +1,710 @@
 <!DOCTYPE html>
-<html lang="zh_cn">
+<html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>HTML/CSS 实例项目导航页</title>
     <style>
       :root {
-        --primary-color: #3498db;
-        --hover-color: #2980b9;
-        --bg-color: #f8f9fa;
-        --card-bg: #ffffff;
-        --text-color: #333333;
-        --border-color: #e1e4e8;
-        --shadow-color: rgba(0, 0, 0, 0.1);
-        --highlight-color: #f0f7ff;
+        --primary: #4a90e2;
+        --accent: #9c6efb;
+        --bg-gradient: linear-gradient(135deg, #f4f7fb, #f9fcff);
+        --card-bg: #fff;
+        --shadow: rgba(0, 0, 0, 0.08);
+        --hover-shadow: rgba(0, 0, 0, 0.18);
+        --border: rgba(0, 0, 0, 0.05);
+        --highlight: rgba(74, 144, 226, 0.08);
+        --text: #222;
+        --text-light: #666;
+        --modal-bg: rgba(0, 0, 0, 0.75);
       }
 
       body {
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        line-height: 1.6;
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 2rem;
-        background-color: var(--bg-color);
-        color: var(--text-color);
+        font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+        background: var(--bg-gradient);
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        color: var(--text);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
       }
 
-      h1 {
+      header {
+        width: 100%;
         text-align: center;
-        color: var(--primary-color);
-        margin-bottom: 2rem;
-        font-weight: 600;
-        font-size: 2.5rem;
-        position: relative;
-        padding-bottom: 1rem;
         position: sticky;
         top: 0;
-        z-index: 1;
-        background-color: var(--bg-color);
-        padding: 1rem 0;
-        backdrop-filter: blur(5px);
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 3px 10px var(--shadow);
+        z-index: 10;
+        padding: 1.5rem 0 1rem;
+        border-bottom: 1px solid var(--border);
       }
 
-      h1::after {
-        content: "";
-        position: absolute;
-        bottom: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 100px;
-        height: 4px;
-        background: linear-gradient(90deg, var(--primary-color), transparent);
-        border-radius: 2px;
+      header h1 {
+        font-size: 2rem;
+        background: linear-gradient(90deg, var(--primary), var(--accent));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        margin-bottom: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 1px;
       }
 
-      .project-list {
+      #search {
+        width: 60%;
+        max-width: 420px;
+        padding: 0.6rem 1rem;
+        border-radius: 9999px;
+        border: 1px solid var(--border);
+        font-size: 1rem;
+        background: #fff;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        transition: all 0.25s ease;
+        outline: none;
+      }
+
+      #search:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+      }
+
+      main {
+        max-width: 1200px;
+        width: 100%;
+        padding: 2.5rem 2rem 4rem;
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 1.5rem;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.8rem;
+        animation: fadeIn 0.8s ease forwards;
       }
 
-      .project-item {
-        background-color: var(--card-bg);
-        border: 1px solid var(--border-color);
-        border-radius: 12px;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 6px var(--shadow-color);
-        overflow: hidden;
-        position: relative;
-        height: 100%;
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
 
-      .project-item:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 25px var(--shadow-color);
-        border-color: var(--primary-color);
-      }
-
-      .project-item::after {
-        content: "";
-        position: absolute;
-        bottom: 0;
+      /* 预览弹窗样式 */
+      .preview-modal {
+        display: none;
+        position: fixed;
+        top: 0;
         left: 0;
         width: 100%;
-        height: 4px;
-        background: linear-gradient(
-          90deg,
-          var(--primary-color),
-          var(--hover-color)
-        );
+        height: 100%;
+        background-color: var(--modal-bg);
+        z-index: 100;
+        justify-content: center;
+        align-items: center;
         opacity: 0;
         transition: opacity 0.3s ease;
       }
 
-      .project-item:hover::after {
+      .preview-modal.active {
+        display: flex;
         opacity: 1;
       }
 
-      .project-link {
-        padding: 1.5rem;
+      .preview-content {
+        background: white;
+        width: 90%;
+        max-width: 900px;
+        height: 80%;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        position: relative;
+        overflow: hidden;
+        animation: modalFadeIn 0.4s ease forwards;
+      }
+
+      @keyframes modalFadeIn {
+        from {
+          opacity: 0;
+          transform: scale(0.9);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      .preview-iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+      }
+
+      .preview-close {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        width: 30px;
+        height: 30px;
+        background: rgba(0, 0, 0, 0.6);
+        border-radius: 50%;
         display: flex;
-        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 10;
+        transition: background 0.2s ease;
+      }
+
+      .preview-close:hover {
+        background: rgba(0, 0, 0, 0.8);
+      }
+
+      .preview-close::before,
+      .preview-close::after {
+        content: "";
+        position: absolute;
+        width: 15px;
+        height: 2px;
+        background: white;
+      }
+
+      .preview-close::before {
+        transform: rotate(45deg);
+      }
+
+      .preview-close::after {
+        transform: rotate(-45deg);
+      }
+
+      .project-item {
+        background: var(--card-bg);
+        border-radius: 16px;
+        border: 1px solid var(--border);
+        box-shadow: 0 6px 16px var(--shadow);
+        transition: all 0.3s ease;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .project-item::before {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: -100%;
+        width: 100%;
+        height: 3px;
+        background: linear-gradient(90deg, var(--primary), var(--accent));
+        transition: all 0.4s ease;
+        opacity: 0;
+      }
+
+      .project-item:hover::before {
+        left: 0;
+        opacity: 1;
+      }
+
+      .project-item:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 10px 25px var(--hover-shadow);
+        border-color: var(--primary);
+      }
+
+      .project-link {
+        display: block;
+        padding: 1.5rem;
         text-decoration: none;
-        color: var(--text-color);
-        transition: all 0.2s ease;
+        color: inherit;
       }
 
       .project-name {
-        font-weight: 600;
+        display: flex;
+        align-items: center;
         font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--primary);
         margin-bottom: 0.5rem;
-        color: var(--primary-color);
-        transition: color 0.2s ease;
       }
 
       .project-number {
-        display: inline-block;
-        width: 24px;
-        height: 24px;
-        background-color: var(--primary-color);
+        background: linear-gradient(135deg, var(--primary), var(--accent));
         color: white;
         border-radius: 50%;
-        text-align: center;
-        line-height: 24px;
-        margin-right: 8px;
+        width: 26px;
+        height: 26px;
         font-size: 0.8rem;
-      }
-
-      .project-desc {
-        color: #666;
-        font-size: 0.9rem;
-        margin-top: 0.5rem;
-        flex-grow: 1;
-      }
-
-      .project-item:hover .project-name {
-        color: var(--hover-color);
-      }
-
-      .project-item:hover .project-link {
-        background-color: var(--highlight-color);
-      }
-
-      .project-meta {
         display: flex;
-        justify-content: space-between;
-        margin-top: 1rem;
-        font-size: 0.8rem;
-        color: #888;
+        align-items: center;
+        justify-content: center;
+        margin-right: 10px;
+        box-shadow: 0 2px 6px rgba(74, 144, 226, 0.3);
+      }
+
+      .project-preview {
+        color: var(--text-light);
+        font-size: 0.9rem;
+        line-height: 1.4;
+        margin-bottom: 0.8rem;
+        min-height: 38px;
       }
 
       .project-tag {
-        background-color: #e1f0fa;
-        color: var(--primary-color);
-        padding: 2px 8px;
-        border-radius: 4px;
+        background: var(--highlight);
+        color: var(--primary);
         font-size: 0.75rem;
+        padding: 3px 8px;
+        border-radius: 8px;
+        display: inline-block;
+        font-weight: 500;
+      }
+
+      footer {
+        text-align: center;
+        font-size: 0.85rem;
+        color: #999;
+        padding: 1.5rem 0 3rem;
       }
 
       @media (max-width: 768px) {
-        .project-list {
-          grid-template-columns: 1fr;
+        #search {
+          width: 85%;
         }
-
-        body {
-          padding: 1rem;
+        header h1 {
+          font-size: 1.7rem;
         }
-
-        h1 {
-          font-size: 2rem;
+        main {
+          padding: 1.5rem;
+          gap: 1rem;
         }
       }
     </style>
   </head>
-
   <body>
-    <h1>HTML/CSS实例项目导航页</h1>
+    <!-- 预览弹窗 -->
+    <div class="preview-modal" id="previewModal">
+      <div class="preview-content">
+        <div class="preview-close" id="previewClose"></div>
+        <iframe class="preview-iframe" id="previewFrame" src=""></iframe>
+      </div>
+    </div>
 
-    <div class="project-list" id="project"></div>
+    <header>
+      <h1>HTML / CSS 实例项目导航</h1>
+      <input id="search" type="text" placeholder="🔍 搜索项目名称..." />
+    </header>
+
+    <main id="project"></main>
+
+    <script>
+      let projectList = [
+        { name: "简单又令人惊艳的hover效果表单案例", url: "./html/1.html" },
+        { name: "3D旋转卡片", url: "./html/2.html" },
+        { name: "伸缩式导航栏", url: "./html/3.html" },
+        { name: "有点小酷的input输入框动画", url: "./html/4.html" },
+        { name: "闪亮的玻璃图标悬浮效果", url: "./html/5.html" },
+        { name: "富有弹性的导航栏标签", url: "./html/6.html" },
+        { name: "弹性旋转菜单", url: "./html/7.html" },
+        { name: "流光按钮 是不是有点小好看", url: "./html/8.html" },
+        { name: "全屏导航栏菜单", url: "./html/9.html" },
+        { name: "菜单悬停效果", url: "./html/10.html" },
+        { name: "炫彩爱心加载特效", url: "./html/11.html" },
+        { name: "粘性小球loading效果", url: "./html/12.html" },
+        { name: "鼠标悬停发光按钮", url: "./html/13.html" },
+        { name: "菜单栏图标悬停效果", url: "./html/14.html" },
+        { name: "好玩的聚光灯文字效果", url: "./html/15.html" },
+        { name: "简单又好看的加载动画效果", url: "./html/16.html" },
+        { name: "有点小酷炫的菱形加载动画", url: "./html/17.html" },
+        { name: "简约不简单的社交分享按钮", url: "./html/18.html" },
+        { name: "有趣的沙漏加载动画", url: "./html/19.html" },
+        { name: "文字裂开效果", url: "./html/20.html" },
+        { name: "手风琴式加载动画", url: "./html/21.html" },
+        { name: "分享按钮切换效果", url: "./html/22.html" },
+        { name: "简单好玩的水球加载效果", url: "./html/23.html" },
+        { name: "酷炫的ANIPLEX文字特效", url: "./html/24.html" },
+        { name: "后台管理系统的侧边导航栏", url: "./html/25.html" },
+        { name: "自定义滤镜实现液体加载动画", url: "./html/26.html" },
+        { name: " 3D旋转木马相册", url: "./html/27.html" },
+        { name: "云朵特效按钮", url: "./html/28.html" },
+        { name: "高级的转动变色加载特效", url: "./html/29.html" },
+        { name: "边框滑动按钮的悬停效果", url: "./html/30.html" },
+        { name: "雷达扫描特效", url: "./html/31.html" },
+        { name: "毛玻璃炫光按钮", url: "./html/32.html" },
+        { name: "手机充电特效", url: "./html/33.html" },
+        { name: "超酷的字体发光效果", url: "./html/34.html" },
+        { name: "超酷的文字滚动特效", url: "./html/35.html" },
+        { name: "伸缩式动态搜索框", url: "./html/36.html" },
+        { name: "JS+CSS实现日月交替效果", url: "./html/37.html" },
+        { name: "3D分层按钮的悬停效果", url: "./html/38.html" },
+        { name: "手机充电特效（二）", url: "./html/39.html" },
+        { name: "抽屉式相册", url: "./html/40.html" },
+        { name: "发光文字悬停特效", url: "./html/41.html" },
+        { name: "背景不停渐变效果", url: "./html/42.html" },
+        { name: "3D轮播卡片", url: "./html/43.html" },
+        { name: "炫彩流光圆环加载动画", url: "./html/44.html" },
+        { name: "响应式卡片悬停效果", url: "./html/45.html" },
+        { name: "波浪文字效果", url: "./html/46.html" },
+        { name: "隐藏式侧边栏菜单", url: "./html/47.html" },
+        { name: "3D立方体旋转相册", url: "./html/48.html" },
+        { name: "3D分层图像悬停效果", url: "./html/49.html" },
+        { name: "不偷看密码的超萌猫头鹰登录界面", url: "./html/50.html" },
+        { name: "动感的金属质感闪光文字", url: "./html/51.html" },
+        { name: "高级感满满的滚轮视差响应效果", url: "./html/52.html" },
+        { name: "有趣的幽灵文字特效", url: "./html/53.html" },
+        { name: "涟漪特效按钮", url: "./html/54.html" },
+        { name: "酷炫的环形加载动画", url: "./html/55.html" },
+        { name: "水波纹按钮效果", url: "./html/56.html" },
+        { name: "背景动态变化的登录界面", url: "./html/57.html" },
+        { name: "有趣的心形加载动画", url: "./html/58.html" },
+        { name: "侧边导航栏", url: "./html/59.html" },
+        { name: "垂直卡片滑动动画", url: "./html/60.html" },
+        { name: "轮播图效果", url: "./html/61.html" },
+        { name: "流星划过天际的动画效果", url: "./html/62.html" },
+        { name: "全屏滚动贴合效果（竖屏）", url: "./html/63.html" },
+        { name: "全屏滚动贴合效果（横屏）", url: "./html/64.html" },
+        { name: "点赞的动画效果", url: "./html/65.html" },
+        { name: "带缩略图的焦点图切换效果", url: "./html/66.html" },
+        { name: "一个简单的太阳系", url: "./html/67.html" },
+        { name: "人物介绍卡片", url: "./html/68.html" },
+        { name: "动感的环形加载动画", url: "./html/69.html" },
+        { name: "图像悬停效果", url: "./html/70.html" },
+        { name: "跳跃的弹性小球加载动画", url: "./html/71.html" },
+        { name: "白桃粉可爱风的立体字时钟", url: "./html/72.html" },
+        { name: "非常酷炫的拟物化滑动开关", url: "./html/73.html" },
+        { name: "仿制网易云音乐网站的轮播图", url: "./html/74.html" },
+        { name: "简约又高级的变色loading动画", url: "./html/75.html" },
+        { name: "旋转的圣诞树", url: "./html/76.html" },
+        { name: "滚动的方块loading动画", url: "./html/77.html" },
+        { name: "按钮悬浮效果", url: "./html/78.html" },
+        { name: "DNA双螺旋动画", url: "./html/79.html" },
+        { name: "始终飞向鼠标的纸飞机", url: "./html/80.html" },
+        { name: "滑动切换的注册登录界面", url: "./html/81.html" },
+        { name: "篮球弹跳动画", url: "./html/82.html" },
+        { name: "马赛克背景的按钮特效", url: "./html/83.html" },
+        { name: "翻书动画", url: "./html/84.html" },
+        { name: "莫比乌斯环loading动画", url: "./html/85.html" },
+        { name: "滚动渐变导航栏", url: "./html/86.html" },
+        { name: "逼真的玻璃卡片悬停效果", url: "./html/87.html" },
+        { name: "广告灯牌效果的loading动画", url: "./html/88.html" },
+        { name: "自带射灯的浮雕按钮", url: "./html/89.html" },
+        { name: "超时空背景的登录界面", url: "./html/90.html" },
+        { name: "旋转的炫光心形loading动画", url: "./html/91.html" },
+        { name: "全屏搜索栏", url: "./html/92.html" },
+        { name: "四色小球的loading动画", url: "./html/93.html" },
+        { name: "悬停翻转的3D卡片", url: "./html/94.html" },
+        { name: "冒泡loading动画", url: "./html/95.html" },
+        { name: "3D卡片hover翻转效果", url: "./html/96.html" },
+        { name: "开箱子动画", url: "./html/97.html" },
+        { name: "创意条纹背景的图像悬停效果", url: "./html/98.html" },
+        { name: "炫彩的发光字特效", url: "./html/99.html" },
+        { name: "黑色的简约下拉菜单", url: "./html/100.html" },
+        { name: "浮雕效果的彩色loading动画", url: "./html/101.html" },
+        { name: "切片式轮播图", url: "./html/102.html" },
+        { name: "百叶窗图片切换效果", url: "./html/103.html" },
+        { name: "单选按钮的创意动画", url: "./html/104.html" },
+        { name: "喜庆绚烂的新年烟花特效", url: "./html/105.html" },
+        { name: "2.5D立体文字效果", url: "./code/106/106.html" },
+        { name: "3D导航栏", url: "./code/107/107.html" },
+        { name: "漂亮的导航栏动画效果", url: "./code/108/108.html" },
+        { name: "灵动的文字loading加载特效", url: "./code/109/109.html" },
+        { name: "百看不腻的旋转loading动画", url: "./code/110/110.html" },
+        { name: "DIY切换衣服图案", url: "./code/111/111.html" },
+        { name: "文本背景扫光效果", url: "./code/112/112.html" },
+        { name: "圆形剪切图片光标悬停特效", url: "./code/113/113.html" },
+        { name: "Tabbar图标栏动画切换特效", url: "./code/114/114.html" },
+        { name: "可爱的熊猫遮眼登录界面", url: "./code/115/115.html" },
+        { name: "社交卡片悬停特效", url: "./code/116/116.html" },
+        { name: "3层图像的滑动对比效果", url: "./code/117/117.html" },
+        { name: "带LOGO的全屏加载动画", url: "./code/118/118.html" },
+        { name: "双层波浪动画特效", url: "./code/119/119.html" },
+        { name: "阿里云盘的侧边导航栏", url: "./code/120/120.html" },
+        { name: "飞行的钢铁侠loading加载动画", url: "./code/121/121.html" },
+        { name: "高光立体壁画式卡片悬停特效", url: "./code/122/122.html" },
+        { name: "3D圆点波浪动画特效", url: "./code/123/123.html" },
+        { name: "丝滑切换的loading加载动画", url: "./code/124/124.html" },
+        { name: "小清新的卡片式注册登录切换效果", url: "./code/125/125.html" },
+        { name: "瀑布流布局", url: "./code/126/126.html" },
+        { name: "带标题的图像悬停效果", url: "./code/127/127.html" },
+        { name: "简约的天气图标动画特效", url: "./code/128/128.html" },
+        { name: "简约的天气图标动画特效（下）", url: "./code/129/129.html" },
+        { name: "传送带式的loading加载动画", url: "./code/130/130.html" },
+        { name: "打字动画特效", url: "./code/131/131.html" },
+        { name: "上下滚动的数字时钟", url: "./code/132/132.html" },
+        { name: "带标题描述的圆角图片手风琴效果", url: "./code/133/133.html" },
+        { name: "简单又别致的环形加载动画", url: "./code/134/134.html" },
+        {
+          name: "左侧分类菜单右侧轮播图的组合布局",
+          url: "./code/135/135.html",
+        },
+        { name: "萌翻少女心的发光果冻泡泡", url: "./code/136/136.html" },
+        { name: "仿制腾讯视频的轮播图", url: "./code/137/137.html" },
+        { name: "月步式的loading加载动画", url: "./code/138/138.html" },
+        { name: "卡片悬停图文遮罩显示特效", url: "./code/139/139.html" },
+        {
+          name: "ANIME搭配SVG实现简约酷炫的登录界面",
+          url: "./code/140/140.html",
+        },
+        { name: "迷你音乐播放器", url: "./code/141/141.html" },
+        { name: "数据碎片故障风科技背景动画特效", url: "./code/142/142.html" },
+        { name: "抖音LOGO故障风文字动画特效", url: "./code/143/143.html" },
+        { name: "图片悬停旋转堆叠特效", url: "./code/144/144.html" },
+        { name: "3D分割图片悬停拼接特效", url: "./code/145/145.html" },
+        { name: "祝福版的3D标签云动画特效", url: "./code/146/146.html" },
+        { name: "关门式的图文组合悬停特效", url: "./code/147/147.html" },
+        { name: "简约的垂直选项卡", url: "./code/148/148.html" },
+        {
+          name: "可切换方向的无缝衔接图片滚动效果",
+          url: "./code/149/149.html",
+        },
+        { name: "仿制B站PC端首页的吃豆人轮播图", url: "./code/150/150.html" },
+        { name: "倒计时动画特效", url: "./code/151/151.html" },
+        { name: "Tab选项卡动画切换效果", url: "./code/152/152.html" },
+        { name: "悬停滚动文字的导航栏", url: "./code/153/153.html" },
+        { name: "可自由拖拽排序的表格", url: "./code/154/154.html" },
+        { name: "背景动态变化的登录界面2.0", url: "./code/155/155.html" },
+        { name: "带进度条的人物卡片切换效果", url: "./code/156/156.html" },
+        { name: "小球爬楼梯loading加载动画", url: "./code/157/157.html" },
+        { name: "快捷菜单图标按钮交互特效", url: "./code/158/158.html" },
+        { name: "翻滚吧乔巴自定义滑块控件", url: "./code/159/159.html" },
+        { name: "带标题的3D多米诺人物卡片", url: "./code/160/160.html" },
+        { name: "环形文字动画特效", url: "./code/161/161.html" },
+        {
+          name: "科技感满满的鼠标移动推开粒子特效",
+          url: "./code/162/162.html",
+        },
+        { name: "彩虹倒映水面的唯美背景", url: "./code/163/163.html" },
+        { name: "鼠标控制飞机的飞行方向", url: "./code/164/164.html" },
+        { name: "脉冲波纹催眠动画特效", url: "./code/165/165.html" },
+        { name: "霜雾玻璃图片预览特效", url: "./code/166/166.html" },
+        { name: "鼠标滚轮水平滚动", url: "./code/167/167.html" },
+        { name: "仿优酷视频轮播图", url: "./code/168/168.html" },
+        { name: "网页底部间隔波浪动画特效", url: "./code/169/169.html" },
+        { name: "打散文字随机浮动特效", url: "./code/170/170.html" },
+        { name: "带密码灯照射的登录界面", url: "./code/171/171.html" },
+        { name: "路飞出海的动画特效", url: "./code/172/172.html" },
+        { name: "交互式图片鼠标悬停景深对焦效果", url: "./code/173/173.html" },
+        { name: "简约的黑色分页", url: "./code/174/174.html" },
+        { name: "带功能区的图片悬停特效", url: "./code/175/175.html" },
+        { name: "输入框打字放大特效", url: "./code/176/176.html" },
+        { name: "悬停带提示的导航栏", url: "./code/177/177.html" },
+        { name: "炫酷的流边按钮", url: "./code/178/178.html" },
+        { name: "悬停放大图片的旅游画廊", url: "./code/179/179.html" },
+        {
+          name: "使用L2Dwidget实现二次元卡通看板娘",
+          url: "./code/180/180.html",
+        },
+        { name: "Canvas图片滑块拖动验证码", url: "./code/181/181.html" },
+        { name: "霁青+翠蓝的Tabbar动画特效", url: "./code/182/182.html" },
+        { name: "蜂巢里的小蜜蜂光标特效", url: "./code/183/183.html" },
+        {
+          name: "九宫格图片鼠标移入移出方向感知特效",
+          url: "./code/184/184.html",
+        },
+        { name: "文字组成肖像特效", url: "./code/185/185.html" },
+        { name: "数字滑动选择控件", url: "./code/186/186.html" },
+        { name: "浪漫的心形文字动画特效", url: "./code/187/187.html" },
+        { name: "饮料瓶造型文字旋转特效", url: "./code/188/188.html" },
+        { name: "焦点图波浪切换动画特效", url: "./code/189/189.html" },
+        { name: "3D翻转Tab选项卡切换特效", url: "./code/190/190.html" },
+        { name: "文字依次点击验证", url: "./code/191/191.html" },
+        { name: "过山车文字动画特效", url: "./code/192/192.html" },
+        { name: "可拖拽排序的人物列表", url: "./code/193/193.html" },
+        { name: "自适应瀑布流布局", url: "./code/194/194.html" },
+        { name: "网站置灰", url: "./code/195/195.html" },
+        { name: "锚点平滑过渡", url: "./code/196/196.html" },
+        { name: "彩带圣诞树", url: "./code/197/197.html" },
+        { name: "网页手电筒", url: "./code/198/198.html" },
+        { name: "不一样的超链接下划线", url: "./code/199/199.html" },
+        { name: "网站实现一键切换暗色主题", url: "./code/200/200.html" },
+        { name: "左右摇晃的输入框", url: "./code/201/201.html" },
+        { name: "过年3D烟花秀", url: "./code/202/202.html" },
+        { name: "特殊验证码输入框", url: "./code/203/203.html" },
+        { name: "彩色圆环溶解加载动画", url: "./code/204/204.html" },
+        { name: "文字涂抹动画", url: "./code/205/205.html" },
+        { name: "人物介绍卡片2.0", url: "./code/206/206.html" },
+        { name: "弹出式悬停效果", url: "./code/207/207.html" },
+        { name: "五彩纸屑礼花筒", url: "./code/208/208.html" },
+        { name: "音频可视化", url: "./code/209/209.html" },
+        { name: "文字溶合切换效果", url: "./code/210/210.html" },
+        { name: "实时给中文添加拼音", url: "./code/211/211.html" },
+        { name: "弧边选项卡", url: "./code/212/212.html" },
+        { name: "旋转彩色loading加载动画", url: "./code/213/213.html" },
+        { name: "创意修剪路径图像悬停效果", url: "./code/214/214.html" },
+        { name: '黑客帝国"代码雨"特效', url: "./code/215/215.html" },
+        { name: "科技感满满的数字科技脸特效", url: "./code/216/216.html" },
+        { name: "锥形渐变彩虹按钮", url: "./code/217/217.html" },
+        { name: "彩色拨动开关", url: "./code/218/218.html" },
+        { name: "右键菜单", url: "./code/219/219.html" },
+        { name: "环绕小球弹性loading动画", url: "./code/220/220.html" },
+        { name: "文字阴影还能这么玩", url: "./code/221/221.html" },
+        { name: "灵动的流边开关切换效果", url: "./code/222/222.html" },
+        { name: "暗紫色Tabbar", url: "./code/223/223.html" },
+        { name: "按钮边框动效", url: "./code/224/224.html" },
+        { name: "全屏范围滑块", url: "./code/225/225.html" },
+        { name: "全屏背景切换动画", url: "./code/226/226.html" },
+        { name: "衣服颜色选择器", url: "./code/227/227.html" },
+        { name: "具有悬停效果的3D闪耀动画", url: "./code/228/228.html" },
+        { name: "创意罗盘时钟", url: "./code/229/229.html" },
+        { name: "原生JS实现全屏滚动", url: "./code/230/230.html" },
+        { name: "文字边框视觉错位", url: "./code/231/231.html" },
+        { name: "旋转中的视差效果", url: "./code/232/232.html" },
+        { name: "环形文字加载动画", url: "./code/233/233.html" },
+        { name: "圣诞按钮", url: "./code/234/234.html" },
+        { name: "图片切换特效之模糊变清晰", url: "./code/235/235.html" },
+        { name: "荧光图标悬停效果", url: "./code/236/236.html" },
+        { name: "菜单按钮的三种切换动画", url: "./code/237/237.html" },
+        { name: "炫彩荧光线条登录框", url: "./code/238/238.html" },
+        { name: "飞行滑块", url: "./code/239/239.html" },
+        { name: "无限循环loading动画", url: "./code/240/240.html" },
+        { name: "旋转渐变光标", url: "./code/241/241.html" },
+        { name: "点画文字悬停效果", url: "./code/242/242.html" },
+        { name: "网格图库", url: "./code/243/243.html" },
+        { name: "粘性文字的滚动效果", url: "./code/244/244.html" },
+        { name: "简约灵动的深色登录界面", url: "./code/245/245.html" },
+        { name: "可爱的卷纸开关", url: "./code/246/246.html" },
+        { name: "图片九宫格", url: "./code/247/247.html" },
+        { name: "响应式漫画网格布局", url: "./code/248/248.html" },
+        { name: "奥运五环", url: "./code/249/249.html" },
+        { name: "叠方块loading加载动画", url: "./code/250/250.html" },
+        { name: "立方体控件的登录表单", url: "./code/251/251.html" },
+        { name: "三色小球旋转叠加loading动画", url: "./code/252/252.html" },
+        { name: "创意的五边形翻转loading动画", url: "./code/253/253.html" },
+        { name: "带缩略图的焦点图", url: "./code/254/254.html" },
+        { name: "可变字体动画", url: "./code/255/255.html" },
+        { name: "全屏滚动", url: "./code/256/256.html" },
+        { name: "步骤条讲解版", url: "./code/257/257.html" },
+        { name: "垂直滚动条", url: "./code/258/258.html" },
+        { name: "垂直卡片滑动动画", url: "./code/259/259.html" },
+        { name: "导航栏动画效果", url: "./code/260/260.html" },
+        { name: "导航栏下拉列表", url: "./code/261/261.html" },
+        { name: "登录界面", url: "./code/262/262.html" },
+        { name: "二级导航菜单", url: "./code/263/263.html" },
+        { name: "发光果冻泡泡", url: "./code/264/264.html" },
+        { name: "翻书动画", url: "./code/265/265.html" },
+        { name: "方向感应名片", url: "./code/266/266.html" },
+        { name: "仿网易云轮播图", url: "./code/267/267.html" },
+        { name: "飞向鼠标的纸飞机", url: "./code/268/268.html" },
+        { name: "浮雕按钮", url: "./code/269/269.html" },
+        { name: "广告灯牌效果", url: "./code/270/270.html" },
+        { name: "滚动的数字时钟", url: "./code/271/271.html" },
+        { name: "后台侧边导航栏", url: "./code/272/272.html" },
+        { name: "后台管理系统侧边栏", url: "./code/273/273.html" },
+        { name: "滑动切换的注册登录界面", url: "./code/274/274.html" },
+        { name: "加载特效", url: "./code/275/275.html" },
+        { name: "简单的后台管理系统", url: "./code/276/276.html" },
+        { name: "简约天气图标", url: "./code/277/277.html" },
+        { name: "简约注册登录页面", url: "./code/278/278.html" },
+        { name: "渐变导航栏", url: "./code/279/279.html" },
+        { name: "焦点图切换效果", url: "./code/280/280.html" },
+        { name: "开箱子动画", url: "./code/281/281.html" },
+        { name: "可爱的登录注册页面", url: "./code/282/282.html" },
+        { name: "立体卡片悬停", url: "./code/283/283.html" },
+        { name: "练手的登录界面", url: "./code/284/284.html" },
+        { name: "轮播图", url: "./code/285/285.html" },
+        { name: "没用的特效", url: "./code/286/286.html" },
+        { name: "模糊滤镜", url: "./code/287/287.html" },
+        { name: "签到功能签退功能", url: "./code/288/288.html" },
+        { name: "切换衣服图案", url: "./code/289/289.html" },
+        { name: "清新登录", url: "./code/290/290.html" },
+        { name: "全屏轮播图", url: "./code/291/291.html" },
+        { name: "人物介绍卡片", url: "./code/292/292.html" },
+        { name: "赛博朋克按钮", url: "./code/293/293.html" },
+        { name: "商品概览图", url: "./code/294/294.html" },
+        { name: "时间轴", url: "./code/295/295.html" },
+        { name: "手机充电特效", url: "./code/296/296.html" },
+        { name: "鼠标悬停发光按钮", url: "./code/297/297.html" },
+        { name: "水波纹按钮效果", url: "./code/298/298.html" },
+        { name: "条纹背景的图像悬停", url: "./code/299/299.html" },
+        { name: "响应式导航栏", url: "./code/300/300.html" },
+        { name: "响应式注册登录", url: "./code/301/301.html" },
+        { name: "响应式自适应登录页面", url: "./code/302/302.html" },
+        { name: "星球模型", url: "./code/303/303.html" },
+        { name: "旋转导航", url: "./code/304/304.html" },
+        { name: "炫彩爱心", url: "./code/305/305.html" },
+        { name: "隐藏搜索框", url: "./code/306/306.html" },
+        { name: "圆角手风琴", url: "./code/307/307.html" },
+        { name: "粘性球球", url: "./code/308/308.html" },
+        { name: "自适应登录界面", url: "./code/309/309.html" },
+        { name: "3D标签云动画", url: "./code/310/310.html" },
+        { name: "按钮悬浮效果", url: "./code/311/311.html" },
+        { name: "奥运五环", url: "./code/312/312.html" },
+        { name: "百叶窗手风琴", url: "./code/313/313.html" },
+        { name: "百叶窗效果", url: "./code/314/314.html" },
+        { name: "背景渐变", url: "./code/315/315.html" },
+        { name: "玻璃卡片悬停效果", url: "./code/316/316.html" },
+        { name: "横向列表与自定义滚动条", url: "./code/317/317.html" },
+      ];
+
+      const container = document.getElementById("project");
+
+      function render(list) {
+        container.innerHTML = list
+          .map(
+            (item, i) => `
+          <div class="project-item">
+            <a href="${
+              item.url
+            }" class="project-link" target="_blank" data-preview-url="${
+              item.url
+            }">
+              <div class="project-name">
+                <span class="project-number">${i + 1}</span>${item.name}
+              </div>
+              <div class="project-preview" data-preview="true">点击查看效果演示</div>
+              <span class="project-tag">CSS效果</span>
+            </a>
+          </div>
+        `
+          )
+          .join("");
+      }
+
+      render(projectList);
+
+      // 弹窗预览功能
+      const previewModal = document.getElementById("previewModal");
+      const previewFrame = document.getElementById("previewFrame");
+      const previewClose = document.getElementById("previewClose");
+
+      // 关闭预览弹窗
+      previewClose.addEventListener("click", () => {
+        previewModal.classList.remove("active");
+        previewFrame.src = "";
+      });
+
+      // 点击弹窗外部区域关闭弹窗
+      previewModal.addEventListener("click", e => {
+        if (e.target === previewModal) {
+          previewModal.classList.remove("active");
+          previewFrame.src = "";
+        }
+      });
+
+      // 委托事件处理，处理项目预览点击
+      document.addEventListener("click", e => {
+        // 如果点击的是预览按钮
+        if (e.target.closest("[data-preview='true']")) {
+          e.preventDefault();
+          const link = e.target.closest(".project-link");
+          const previewUrl = link.getAttribute("data-preview-url");
+
+          // 打开预览弹窗
+          previewFrame.src = previewUrl;
+          previewModal.classList.add("active");
+          return false;
+        }
+      });
+
+      document.getElementById("search").addEventListener("input", e => {
+        const kw = e.target.value.toLowerCase().trim();
+        const filtered = projectList.filter(p =>
+          p.name.toLowerCase().includes(kw)
+        );
+        render(filtered);
+      });
+    </script>
   </body>
-
-  <script>
-    let projectList = [
-      { name: "简单又令人惊艳的hover效果表单案例", url: "./html/1.html" },
-      { name: "3D旋转卡片", url: "./html/2.html" },
-      { name: "伸缩式导航栏", url: "./html/3.html" },
-      { name: "有点小酷的input输入框动画", url: "./html/4.html" },
-      { name: "闪亮的玻璃图标悬浮效果", url: "./html/5.html" },
-      { name: "富有弹性的导航栏标签", url: "./html/6.html" },
-      { name: "弹性旋转菜单", url: "./html/7.html" },
-      { name: "流光按钮 是不是有点小好看", url: "./html/8.html" },
-      { name: "全屏导航栏菜单", url: "./html/9.html" },
-      { name: "菜单悬停效果", url: "./html/10.html" },
-      { name: "炫彩爱心加载特效", url: "./html/11.html" },
-      { name: "粘性小球loading效果", url: "./html/12.html" },
-      { name: "鼠标悬停发光按钮", url: "./html/13.html" },
-      { name: "菜单栏图标悬停效果", url: "./html/14.html" },
-      { name: "好玩的聚光灯文字效果", url: "./html/15.html" },
-      { name: "简单又好看的加载动画效果", url: "./html/16.html" },
-      { name: "有点小酷炫的菱形加载动画", url: "./html/17.html" },
-      { name: "简约不简单的社交分享按钮", url: "./html/18.html" },
-      { name: "有趣的沙漏加载动画", url: "./html/19.html" },
-      { name: "文字裂开效果", url: "./html/20.html" },
-      { name: "手风琴式加载动画", url: "./html/21.html" },
-      { name: "分享按钮切换效果", url: "./html/22.html" },
-      { name: "简单好玩的水球加载效果", url: "./html/23.html" },
-      { name: "酷炫的ANIPLEX文字特效", url: "./html/24.html" },
-      { name: "后台管理系统的侧边导航栏", url: "./html/25.html" },
-      { name: "自定义滤镜实现液体加载动画", url: "./html/26.html" },
-      { name: " 3D旋转木马相册", url: "./html/27.html" },
-      { name: "云朵特效按钮", url: "./html/28.html" },
-      { name: "高级的转动变色加载特效", url: "./html/29.html" },
-      { name: "边框滑动按钮的悬停效果", url: "./html/30.html" },
-      { name: "雷达扫描特效", url: "./html/31.html" },
-      { name: "毛玻璃炫光按钮", url: "./html/32.html" },
-      { name: "手机充电特效", url: "./html/33.html" },
-      { name: "超酷的字体发光效果", url: "./html/34.html" },
-      { name: "超酷的文字滚动特效", url: "./html/35.html" },
-      { name: "伸缩式动态搜索框", url: "./html/36.html" },
-      { name: "JS+CSS实现日月交替效果", url: "./html/37.html" },
-      { name: "3D分层按钮的悬停效果", url: "./html/38.html" },
-      { name: "手机充电特效（二）", url: "./html/39.html" },
-      { name: "抽屉式相册", url: "./html/40.html" },
-      { name: "发光文字悬停特效", url: "./html/41.html" },
-      { name: "背景不停渐变效果", url: "./html/42.html" },
-      { name: "3D轮播卡片", url: "./html/43.html" },
-      { name: "炫彩流光圆环加载动画", url: "./html/44.html" },
-      { name: "响应式卡片悬停效果", url: "./html/45.html" },
-      { name: "波浪文字效果", url: "./html/46.html" },
-      { name: "隐藏式侧边栏菜单", url: "./html/47.html" },
-      { name: "3D立方体旋转相册", url: "./html/48.html" },
-      { name: "3D分层图像悬停效果", url: "./html/49.html" },
-      { name: "不偷看密码的超萌猫头鹰登录界面", url: "./html/50.html" },
-      { name: "动感的金属质感闪光文字", url: "./html/51.html" },
-      { name: "高级感满满的滚轮视差响应效果", url: "./html/52.html" },
-      { name: "有趣的幽灵文字特效", url: "./html/53.html" },
-      { name: "涟漪特效按钮", url: "./html/54.html" },
-      { name: "酷炫的环形加载动画", url: "./html/55.html" },
-      { name: "水波纹按钮效果", url: "./html/56.html" },
-      { name: "背景动态变化的登录界面", url: "./html/57.html" },
-      { name: "有趣的心形加载动画", url: "./html/58.html" },
-      { name: "侧边导航栏", url: "./html/59.html" },
-      { name: "垂直卡片滑动动画", url: "./html/60.html" },
-      { name: "轮播图效果", url: "./html/61.html" },
-      { name: "流星划过天际的动画效果", url: "./html/62.html" },
-      { name: "全屏滚动贴合效果（竖屏）", url: "./html/63.html" },
-      { name: "全屏滚动贴合效果（横屏）", url: "./html/64.html" },
-      { name: "点赞的动画效果", url: "./html/65.html" },
-      { name: "带缩略图的焦点图切换效果", url: "./html/66.html" },
-      { name: "一个简单的太阳系", url: "./html/67.html" },
-      { name: "人物介绍卡片", url: "./html/68.html" },
-      { name: "动感的环形加载动画", url: "./html/69.html" },
-      { name: "图像悬停效果", url: "./html/70.html" },
-      { name: "跳跃的弹性小球加载动画", url: "./html/71.html" },
-      { name: "白桃粉可爱风的立体字时钟", url: "./html/72.html" },
-      { name: "非常酷炫的拟物化滑动开关", url: "./html/73.html" },
-      { name: "仿制网易云音乐网站的轮播图", url: "./html/74.html" },
-      { name: "简约又高级的变色loading动画", url: "./html/75.html" },
-      { name: "旋转的圣诞树", url: "./html/76.html" },
-      { name: "滚动的方块loading动画", url: "./html/77.html" },
-      { name: "按钮悬浮效果", url: "./html/78.html" },
-      { name: "DNA双螺旋动画", url: "./html/79.html" },
-      { name: "始终飞向鼠标的纸飞机", url: "./html/80.html" },
-      { name: "滑动切换的注册登录界面", url: "./html/81.html" },
-      { name: "篮球弹跳动画", url: "./html/82.html" },
-      { name: "马赛克背景的按钮特效", url: "./html/83.html" },
-      { name: "翻书动画", url: "./html/84.html" },
-      { name: "莫比乌斯环loading动画", url: "./html/85.html" },
-      { name: "滚动渐变导航栏", url: "./html/86.html" },
-      { name: "逼真的玻璃卡片悬停效果", url: "./html/87.html" },
-      { name: "广告灯牌效果的loading动画", url: "./html/88.html" },
-      { name: "自带射灯的浮雕按钮", url: "./html/89.html" },
-      { name: "超时空背景的登录界面", url: "./html/90.html" },
-      { name: "旋转的炫光心形loading动画", url: "./html/91.html" },
-      { name: "全屏搜索栏", url: "./html/92.html" },
-      { name: "四色小球的loading动画", url: "./html/93.html" },
-      { name: "悬停翻转的3D卡片", url: "./html/94.html" },
-      { name: "冒泡loading动画", url: "./html/95.html" },
-      { name: "3D卡片hover翻转效果", url: "./html/96.html" },
-      { name: "开箱子动画", url: "./html/97.html" },
-      { name: "创意条纹背景的图像悬停效果", url: "./html/98.html" },
-      { name: "炫彩的发光字特效", url: "./html/99.html" },
-      { name: "黑色的简约下拉菜单", url: "./html/100.html" },
-      { name: "浮雕效果的彩色loading动画", url: "./html/101.html" },
-      { name: "切片式轮播图", url: "./html/102.html" },
-      { name: "百叶窗图片切换效果", url: "./html/103.html" },
-      { name: "单选按钮的创意动画", url: "./html/104.html" },
-      { name: "喜庆绚烂的新年烟花特效", url: "./html/105.html" },
-      { name: "2.5D立体文字效果", url: "./code/106/106.html" },
-      { name: "3D导航栏", url: "./code/107/107.html" },
-      { name: "漂亮的导航栏动画效果", url: "./code/108/108.html" },
-      { name: "灵动的文字loading加载特效", url: "./code/109/109.html" },
-      { name: "百看不腻的旋转loading动画", url: "./code/110/110.html" },
-      { name: "DIY切换衣服图案", url: "./code/111/111.html" },
-      { name: "文本背景扫光效果", url: "./code/112/112.html" },
-      { name: "圆形剪切图片光标悬停特效", url: "./code/113/113.html" },
-      { name: "Tabbar图标栏动画切换特效", url: "./code/114/114.html" },
-      { name: "可爱的熊猫遮眼登录界面", url: "./code/115/115.html" },
-      { name: "社交卡片悬停特效", url: "./code/116/116.html" },
-      { name: "3层图像的滑动对比效果", url: "./code/117/117.html" },
-      { name: "带LOGO的全屏加载动画", url: "./code/118/118.html" },
-      { name: "双层波浪动画特效", url: "./code/119/119.html" },
-      { name: "阿里云盘的侧边导航栏", url: "./code/120/120.html" },
-      { name: "飞行的钢铁侠loading加载动画", url: "./code/121/121.html" },
-      { name: "高光立体壁画式卡片悬停特效", url: "./code/122/122.html" },
-      { name: "3D圆点波浪动画特效", url: "./code/123/123.html" },
-      { name: "丝滑切换的loading加载动画", url: "./code/124/124.html" },
-      { name: "小清新的卡片式注册登录切换效果", url: "./code/125/125.html" },
-      { name: "瀑布流布局", url: "./code/126/126.html" },
-      { name: "带标题的图像悬停效果", url: "./code/127/127.html" },
-      { name: "简约的天气图标动画特效", url: "./code/128/128.html" },
-      { name: "简约的天气图标动画特效（下）", url: "./code/129/129.html" },
-      { name: "传送带式的loading加载动画", url: "./code/130/130.html" },
-      { name: "打字动画特效", url: "./code/131/131.html" },
-      { name: "上下滚动的数字时钟", url: "./code/132/132.html" },
-      { name: "带标题描述的圆角图片手风琴效果", url: "./code/133/133.html" },
-      { name: "简单又别致的环形加载动画", url: "./code/134/134.html" },
-      { name: "左侧分类菜单右侧轮播图的组合布局", url: "./code/135/135.html" },
-      { name: "萌翻少女心的发光果冻泡泡", url: "./code/136/136.html" },
-      { name: "仿制腾讯视频的轮播图", url: "./code/137/137.html" },
-      { name: "月步式的loading加载动画", url: "./code/138/138.html" },
-      { name: "卡片悬停图文遮罩显示特效", url: "./code/139/139.html" },
-      {
-        name: "ANIME搭配SVG实现简约酷炫的登录界面",
-        url: "./code/140/140.html",
-      },
-      { name: "迷你音乐播放器", url: "./code/141/141.html" },
-      { name: "数据碎片故障风科技背景动画特效", url: "./code/142/142.html" },
-      { name: "抖音LOGO故障风文字动画特效", url: "./code/143/143.html" },
-      { name: "图片悬停旋转堆叠特效", url: "./code/144/144.html" },
-      { name: "3D分割图片悬停拼接特效", url: "./code/145/145.html" },
-      { name: "祝福版的3D标签云动画特效", url: "./code/146/146.html" },
-      { name: "关门式的图文组合悬停特效", url: "./code/147/147.html" },
-      { name: "简约的垂直选项卡", url: "./code/148/148.html" },
-      { name: "可切换方向的无缝衔接图片滚动效果", url: "./code/149/149.html" },
-      { name: "仿制B站PC端首页的吃豆人轮播图", url: "./code/150/150.html" },
-      { name: "倒计时动画特效", url: "./code/151/151.html" },
-      { name: "Tab选项卡动画切换效果", url: "./code/152/152.html" },
-      { name: "悬停滚动文字的导航栏", url: "./code/153/153.html" },
-      { name: "可自由拖拽排序的表格", url: "./code/154/154.html" },
-      { name: "背景动态变化的登录界面2.0", url: "./code/155/155.html" },
-      { name: "带进度条的人物卡片切换效果", url: "./code/156/156.html" },
-      { name: "小球爬楼梯loading加载动画", url: "./code/157/157.html" },
-      { name: "快捷菜单图标按钮交互特效", url: "./code/158/158.html" },
-      { name: "翻滚吧乔巴自定义滑块控件", url: "./code/159/159.html" },
-      { name: "带标题的3D多米诺人物卡片", url: "./code/160/160.html" },
-      { name: "环形文字动画特效", url: "./code/161/161.html" },
-      { name: "科技感满满的鼠标移动推开粒子特效", url: "./code/162/162.html" },
-      { name: "彩虹倒映水面的唯美背景", url: "./code/163/163.html" },
-      { name: "鼠标控制飞机的飞行方向", url: "./code/164/164.html" },
-      { name: "脉冲波纹催眠动画特效", url: "./code/165/165.html" },
-      { name: "霜雾玻璃图片预览特效", url: "./code/166/166.html" },
-      { name: "鼠标滚轮水平滚动", url: "./code/167/167.html" },
-      { name: "仿优酷视频轮播图", url: "./code/168/168.html" },
-      { name: "网页底部间隔波浪动画特效", url: "./code/169/169.html" },
-      { name: "打散文字随机浮动特效", url: "./code/170/170.html" },
-      { name: "带密码灯照射的登录界面", url: "./code/171/171.html" },
-      { name: "路飞出海的动画特效", url: "./code/172/172.html" },
-      { name: "交互式图片鼠标悬停景深对焦效果", url: "./code/173/173.html" },
-      { name: "简约的黑色分页", url: "./code/174/174.html" },
-      { name: "带功能区的图片悬停特效", url: "./code/175/175.html" },
-      { name: "输入框打字放大特效", url: "./code/176/176.html" },
-      { name: "悬停带提示的导航栏", url: "./code/177/177.html" },
-      { name: "炫酷的流边按钮", url: "./code/178/178.html" },
-      { name: "悬停放大图片的旅游画廊", url: "./code/179/179.html" },
-      { name: "使用L2Dwidget实现二次元卡通看板娘", url: "./code/180/180.html" },
-      { name: "Canvas图片滑块拖动验证码", url: "./code/181/181.html" },
-      { name: "霁青+翠蓝的Tabbar动画特效", url: "./code/182/182.html" },
-      { name: "蜂巢里的小蜜蜂光标特效", url: "./code/183/183.html" },
-      {
-        name: "九宫格图片鼠标移入移出方向感知特效",
-        url: "./code/184/184.html",
-      },
-      { name: "文字组成肖像特效", url: "./code/185/185.html" },
-      { name: "数字滑动选择控件", url: "./code/186/186.html" },
-      { name: "浪漫的心形文字动画特效", url: "./code/187/187.html" },
-      { name: "饮料瓶造型文字旋转特效", url: "./code/188/188.html" },
-      { name: "焦点图波浪切换动画特效", url: "./code/189/189.html" },
-      { name: "3D翻转Tab选项卡切换特效", url: "./code/190/190.html" },
-      { name: "文字依次点击验证", url: "./code/191/191.html" },
-      { name: "过山车文字动画特效", url: "./code/192/192.html" },
-      { name: "可拖拽排序的人物列表", url: "./code/193/193.html" },
-      { name: "自适应瀑布流布局", url: "./code/194/194.html" },
-      { name: "网站置灰", url: "./code/195/195.html" },
-      { name: "锚点平滑过渡", url: "./code/196/196.html" },
-      { name: "彩带圣诞树", url: "./code/197/197.html" },
-      { name: "网页手电筒", url: "./code/198/198.html" },
-      { name: "不一样的超链接下划线", url: "./code/199/199.html" },
-      { name: "网站实现一键切换暗色主题", url: "./code/200/200.html" },
-      { name: "左右摇晃的输入框", url: "./code/201/201.html" },
-      { name: "过年3D烟花秀", url: "./code/202/202.html" },
-      { name: "特殊验证码输入框", url: "./code/203/203.html" },
-      { name: "彩色圆环溶解加载动画", url: "./code/204/204.html" },
-      { name: "文字涂抹动画", url: "./code/205/205.html" },
-      { name: "人物介绍卡片2.0", url: "./code/206/206.html" },
-      { name: "弹出式悬停效果", url: "./code/207/207.html" },
-      { name: "五彩纸屑礼花筒", url: "./code/208/208.html" },
-      { name: "音频可视化", url: "./code/209/209.html" },
-      { name: "文字溶合切换效果", url: "./code/210/210.html" },
-      { name: "实时给中文添加拼音", url: "./code/211/211.html" },
-      { name: "弧边选项卡", url: "./code/212/212.html" },
-      { name: "旋转彩色loading加载动画", url: "./code/213/213.html" },
-      { name: "创意修剪路径图像悬停效果", url: "./code/214/214.html" },
-      { name: '黑客帝国"代码雨"特效', url: "./code/215/215.html" },
-      { name: "科技感满满的数字科技脸特效", url: "./code/216/216.html" },
-      { name: "锥形渐变彩虹按钮", url: "./code/217/217.html" },
-      { name: "彩色拨动开关", url: "./code/218/218.html" },
-      { name: "右键菜单", url: "./code/219/219.html" },
-      { name: "环绕小球弹性loading动画", url: "./code/220/220.html" },
-      { name: "文字阴影还能这么玩", url: "./code/221/221.html" },
-      { name: "灵动的流边开关切换效果", url: "./code/222/222.html" },
-      { name: "暗紫色Tabbar", url: "./code/223/223.html" },
-      { name: "按钮边框动效", url: "./code/224/224.html" },
-      { name: "全屏范围滑块", url: "./code/225/225.html" },
-      { name: "全屏背景切换动画", url: "./code/226/226.html" },
-      { name: "衣服颜色选择器", url: "./code/227/227.html" },
-      { name: "具有悬停效果的3D闪耀动画", url: "./code/228/228.html" },
-      { name: "创意罗盘时钟", url: "./code/229/229.html" },
-      { name: "原生JS实现全屏滚动", url: "./code/230/230.html" },
-      { name: "文字边框视觉错位", url: "./code/231/231.html" },
-      { name: "旋转中的视差效果", url: "./code/232/232.html" },
-      { name: "环形文字加载动画", url: "./code/233/233.html" },
-      { name: "圣诞按钮", url: "./code/234/234.html" },
-      { name: "图片切换特效之模糊变清晰", url: "./code/235/235.html" },
-      { name: "荧光图标悬停效果", url: "./code/236/236.html" },
-      { name: "菜单按钮的三种切换动画", url: "./code/237/237.html" },
-      { name: "炫彩荧光线条登录框", url: "./code/238/238.html" },
-      { name: "飞行滑块", url: "./code/239/239.html" },
-      { name: "无限循环loading动画", url: "./code/240/240.html" },
-      { name: "旋转渐变光标", url: "./code/241/241.html" },
-      { name: "点画文字悬停效果", url: "./code/242/242.html" },
-      { name: "网格图库", url: "./code/243/243.html" },
-      { name: "粘性文字的滚动效果", url: "./code/244/244.html" },
-      { name: "简约灵动的深色登录界面", url: "./code/245/245.html" },
-      { name: "可爱的卷纸开关", url: "./code/246/246.html" },
-      { name: "图片九宫格", url: "./code/247/247.html" },
-      { name: "响应式漫画网格布局", url: "./code/248/248.html" },
-      { name: "奥运五环", url: "./code/249/249.html" },
-      { name: "叠方块loading加载动画", url: "./code/250/250.html" },
-      { name: "立方体控件的登录表单", url: "./code/251/251.html" },
-      { name: "三色小球旋转叠加loading动画", url: "./code/252/252.html" },
-      { name: "创意的五边形翻转loading动画", url: "./code/253/253.html" },
-      { name: "带缩略图的焦点图", url: "./code/254/254.html" },
-      { name: "可变字体动画", url: "./code/255/255.html" },
-      { name: "全屏滚动", url: "./code/256/256.html" },
-      { name: "步骤条讲解版", url: "./code/257/257.html" },
-      { name: "垂直滚动条", url: "./code/258/258.html" },
-      { name: "垂直卡片滑动动画", url: "./code/259/259.html" },
-      { name: "导航栏动画效果", url: "./code/260/260.html" },
-      { name: "导航栏下拉列表", url: "./code/261/261.html" },
-      { name: "登录界面", url: "./code/262/262.html" },
-      { name: "二级导航菜单", url: "./code/263/263.html" },
-      { name: "发光果冻泡泡", url: "./code/264/264.html" },
-      { name: "翻书动画", url: "./code/265/265.html" },
-      { name: "方向感应名片", url: "./code/266/266.html" },
-      { name: "仿网易云轮播图", url: "./code/267/267.html" },
-      { name: "飞向鼠标的纸飞机", url: "./code/268/268.html" },
-      { name: "浮雕按钮", url: "./code/269/269.html" },
-      { name: "广告灯牌效果", url: "./code/270/270.html" },
-      { name: "滚动的数字时钟", url: "./code/271/271.html" },
-      { name: "后台侧边导航栏", url: "./code/272/272.html" },
-      { name: "后台管理系统侧边栏", url: "./code/273/273.html" },
-      { name: "滑动切换的注册登录界面", url: "./code/274/274.html" },
-      { name: "加载特效", url: "./code/275/275.html" },
-      { name: "简单的后台管理系统", url: "./code/276/276.html" },
-      { name: "简约天气图标", url: "./code/277/277.html" },
-      { name: "简约注册登录页面", url: "./code/278/278.html" },
-      { name: "渐变导航栏", url: "./code/279/279.html" },
-      { name: "焦点图切换效果", url: "./code/280/280.html" },
-      { name: "开箱子动画", url: "./code/281/281.html" },
-      { name: "可爱的登录注册页面", url: "./code/282/282.html" },
-      { name: "立体卡片悬停", url: "./code/283/283.html" },
-      { name: "练手的登录界面", url: "./code/284/284.html" },
-      { name: "轮播图", url: "./code/285/285.html" },
-      { name: "没用的特效", url: "./code/286/286.html" },
-      { name: "模糊滤镜", url: "./code/287/287.html" },
-      { name: "签到功能签退功能", url: "./code/288/288.html" },
-      { name: "切换衣服图案", url: "./code/289/289.html" },
-      { name: "清新登录", url: "./code/290/290.html" },
-      { name: "全屏轮播图", url: "./code/291/291.html" },
-      { name: "人物介绍卡片", url: "./code/292/292.html" },
-      { name: "赛博朋克按钮", url: "./code/293/293.html" },
-      { name: "商品概览图", url: "./code/294/294.html" },
-      { name: "时间轴", url: "./code/295/295.html" },
-      { name: "手机充电特效", url: "./code/296/296.html" },
-      { name: "鼠标悬停发光按钮", url: "./code/297/297.html" },
-      { name: "水波纹按钮效果", url: "./code/298/298.html" },
-      { name: "条纹背景的图像悬停", url: "./code/299/299.html" },
-      { name: "响应式导航栏", url: "./code/300/300.html" },
-      { name: "响应式注册登录", url: "./code/301/301.html" },
-      { name: "响应式自适应登录页面", url: "./code/302/302.html" },
-      { name: "星球模型", url: "./code/303/303.html" },
-      { name: "旋转导航", url: "./code/304/304.html" },
-      { name: "炫彩爱心", url: "./code/305/305.html" },
-      { name: "隐藏搜索框", url: "./code/306/306.html" },
-      { name: "圆角手风琴", url: "./code/307/307.html" },
-      { name: "粘性球球", url: "./code/308/308.html" },
-      { name: "自适应登录界面", url: "./code/309/309.html" },
-      { name: "3D标签云动画", url: "./code/310/310.html" },
-      { name: "按钮悬浮效果", url: "./code/311/311.html" },
-      { name: "奥运五环", url: "./code/312/312.html" },
-      { name: "百叶窗手风琴", url: "./code/313/313.html" },
-      { name: "百叶窗效果", url: "./code/314/314.html" },
-      { name: "背景渐变", url: "./code/315/315.html" },
-      { name: "玻璃卡片悬停效果", url: "./code/316/316.html" },
-      { name: "横向列表与自定义滚动条", url: "./code/317/317.html" },
-    ];
-
-    const project = document.getElementById("project");
-    project.innerHTML = projectList
-      .map((item, index) => {
-        return `
-      <div class="project-item">
-        <a href="${item.url}" class="project-link">
-          <div class="project-name">
-            <span class="project-number">${index + 1}</span>
-            ${item.name}
-          </div>
-
-          <div class="project-desc">
-              ${
-                item.desc ||
-                (item.name.length > 8
-                  ? item.name.substring(0, 8) + ". . ."
-                  : item.name)
-              }
-          </div>
-
-          <div class="project-meta">
-            <span class="project-tag">${item.tag || "效果"}</span>
-          </div>
-        </a >
-      </div >
-    `;
-      })
-      .join("");
-  </script>
 </html>
