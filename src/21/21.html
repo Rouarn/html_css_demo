@@ -1,24 +1,25 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
 
-<head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <title>纯CSS实现漂亮的加载动画</title>
+    <link rel="stylesheet" href="./21.css" />
+  </head>
 
-    <title>纯CSS实现漂亮的加载动�?/title>
-    <link rel="stylesheet" href="./21.css">
-</head>
-
-<body>
+  <body>
     <div class="loading">
-        <!-- �?-x是自定义属性，在后面样式中会用到�?-->
-        <div style="--x:0"></div>
-        <div style="--x:1"></div>
-        <div style="--x:2"></div>
-        <div style="--x:3"></div>
-        <div style="--x:4"></div>
-        <div style="--x:5"></div>
+      <!-- 每个div表示一个点，通过--x自定义属性来控制每个点的延迟时间 -->
+      <div style="--x: 0"></div>
+      <div style="--x: 1"></div>
+      <div style="--x: 2"></div>
+      <div style="--x: 3"></div>
+      <div style="--x: 4"></div>
+      <div style="--x: 5"></div>
     </div>
-</body>
-
+  </body>
 </html>

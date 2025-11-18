@@ -27,17 +27,17 @@
 
       // 定义两个函数开关（门）
       let isIn = true; // 鼠标进去的门，默认打开
-      let isOut = false; // 鼠标出去的门，默认关�?
+      let isOut = false; // 鼠标出去的门，默认关<
 
       var span; // 给未出生的元素取个名字span
 
       // 添加监听
-      // 监听鼠标进去的事�?
+      // 监听鼠标进去的事<
       con.addEventListener("mouseenter", e => {
-        // 如果进去的门是打开的，就可以执行这个函�?
+        // 如果进去的门是打开的，就可以执行这个函<
         if (isIn) {
-          // 获取进入的鼠标位�?
-          // 生成元素的位�?进入点距离窗口的距离-父盒子距离窗口的距离
+          // 获取进入的鼠标位<
+          // 生成元素的位<进入点距离窗口的距离-父盒子距离窗口的距离
           let inX = e.clientX - e.target.offsetLeft;
           let inY = e.clientY - e.target.offsetTop;
 
@@ -48,29 +48,29 @@
           // 添加到con对应的父元素，即container
           con.appendChild(el);
 
-          $(".container span").removeClass("out"); // 移除出去的动�?
-          $(".container span").addClass("in"); // 添加进入的动�?
+          $(".container span").removeClass("out"); // 移除出去的动<
+          $(".container span").addClass("in"); // 添加进入的动<
           span = document.querySelector(".container span");
-          isIn = false; // 关闭进来的门（不能使用进入的方法�?
-          isOut = true; // 打开出去的门（可以使用出去的方法�?
+          isIn = false; // 关闭进来的门（不能使用进入的方法<
+          isOut = true; // 打开出去的门（可以使用出去的方法<
         }
       });
-      // 监听鼠标出去的事�?
+      // 监听鼠标出去的事<
       con.addEventListener("mouseleave", e => {
         if (isOut) {
-          // 获取出去的鼠标位�?
-          // 生成元素的位�?出去点距离窗口的距离-父盒子距离窗口的距离
+          // 获取出去的鼠标位<
+          // 生成元素的位<出去点距离窗口的距离-父盒子距离窗口的距离
           let outX = e.clientX - e.target.offsetLeft;
           let outY = e.clientY - e.target.offsetTop;
 
-          $(".container span").removeClass("in"); // 移除进入的动�?
-          $(".container span").addClass("out"); // 添加出去的动�?
-          // 添加出去的坐�?
+          $(".container span").removeClass("in"); // 移除进入的动<
+          $(".container span").addClass("out"); // 添加出去的动<
+          // 添加出去的坐<
           $(".out").css("left", outX + "px");
           $(".out").css("top", outY + "px");
 
           isOut = false; // 关闭出去的门
-          // 当动画结束后再删除元�?
+          // 当动画结束后再删除元<
           setTimeout(() => {
             con.removeChild(span); // 删除元素
             isIn = true; // 打开进入的门

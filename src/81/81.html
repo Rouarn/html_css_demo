@@ -1,69 +1,70 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
 
-<head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <title>滑动切换的注册登录界面</title>
+    <link rel="stylesheet" href="./81.css" />
+  </head>
 
-    <title>滑动切换的注册登录界�?/title>
-    <link rel="stylesheet" href="./81.css">
-</head>
-
-<body>
+  <body>
     <div class="container">
-        <div class="form-box">
-            <!-- 注册 -->
-            <div class="register-box hidden">
-                <h1>register</h1>
-                <input type="text" placeholder="用户�?>
-                <input type="email" placeholder="邮箱">
-                <input type="password" placeholder="密码">
-                <input type="password" placeholder="确认密码">
-                <button>注册</button>
-            </div>
-            <!-- 登录 -->
-            <div class="login-box">
-                <h1>login</h1>
-                <input type="text" placeholder="用户�?>
-                <input type="password" placeholder="密码">
-                <button>登录</button>
-            </div>
+      <div class="form-box">
+        <!-- 注册 -->
+        <div class="register-box hidden">
+          <h1>register</h1>
+          <input type="text" placeholder="用户名" />
+          <input type="email" placeholder="邮箱" />
+          <input type="password" placeholder="密码" />
+          <input type="password" placeholder="确认密码" />
+          <button>注册</button>
         </div>
-        <div class="con-box left">
-            <h2>欢迎来到<span>宠物之家</span></h2>
-            <p>快来领取你的专属<span>宠物</span>�?/p>
-            <img src="../images/cat/1.png" alt="">
-            <p>已有账号</p>
-            <button id="login">去登�?/button>
+        <!-- 登录 -->
+        <div class="login-box">
+          <h1>login</h1>
+          <input type="text" placeholder="用户名" />
+          <input type="password" placeholder="密码" />
+          <button>登录</button>
         </div>
-        <div class="con-box right">
-            <h2>欢迎来到<span>宠物之家</span></h2>
-            <p>快来看看你的可爱<span>宠物</span>�?/p>
-            <img src="../images/cat/2.png" alt="">
-            <p>没有账号�?/p>
-            <button id="register">去注�?/button>
-        </div>
+      </div>
+      <div class="con-box left">
+        <h2>欢迎来到<span>宠物之家</span></h2>
+        <p>快来领取你的专属<span>宠物</span></p>
+        <img src="./image/1.png" alt="" />
+        <p>已有账号</p>
+        <button id="login">去登录</button>
+      </div>
+      <div class="con-box right">
+        <h2>欢迎来到<span>宠物之家</span></h2>
+        <p>快来看看你的可爱<span>宠物</span></p>
+        <img src="./image/2.png" alt="" />
+        <p>没有账号</p>
+        <button id="register">去注册</button>
+      </div>
     </div>
     <script>
-        // 要操作到的元�?
-        let login=document.getElementById('login');
-        let register=document.getElementById('register');
-        let form_box=document.getElementsByClassName('form-box')[0];
-        let register_box=document.getElementsByClassName('register-box')[0];
-        let login_box=document.getElementsByClassName('login-box')[0];
-        // 去注册按钮点击事�?
-        register.addEventListener('click',()=>{
-            form_box.style.transform='translateX(80%)';
-            login_box.classList.add('hidden');
-            register_box.classList.remove('hidden');
-        })
-        // 去登录按钮点击事�?
-        login.addEventListener('click',()=>{
-            form_box.style.transform='translateX(0%)';
-            register_box.classList.add('hidden');
-            login_box.classList.remove('hidden');
-        })
+      // 要操作到的元素
+      let login = document.getElementById("login");
+      let register = document.getElementById("register");
+      let form_box = document.getElementsByClassName("form-box")[0];
+      let register_box = document.getElementsByClassName("register-box")[0];
+      let login_box = document.getElementsByClassName("login-box")[0];
+      // 去注册按钮点击事件
+      register.addEventListener("click", () => {
+        form_box.style.transform = "translateX(80%)";
+        login_box.classList.add("hidden");
+        register_box.classList.remove("hidden");
+      });
+      // 去登录按钮点击事件
+      login.addEventListener("click", () => {
+        form_box.style.transform = "translateX(0%)";
+        register_box.classList.add("hidden");
+        login_box.classList.remove("hidden");
+      });
     </script>
-</body>
-
+  </body>
 </html>
