@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+
+    <title>马赛克背景的按钮特效</title>
+    <link rel="stylesheet" href="./83.css">
+</head>
+
+<body>
+    <div class="button">
+        <div class="back" style="--c:#e74c3c;"></div>
+        <p>求点�?/p>
+    </div>
+    <div class="button">
+        <div class="back" style="--c:#2ecc71;"></div>
+        <p>求关�?/p>
+    </div>
+    <div class="button">
+        <div class="back" style="--c:#3498db;"></div>
+        <p>求收�?/p>
+    </div>
+    <div class="button">
+        <div class="back" style="--c:#9b59b6;"></div>
+        <p>求转�?/p>
+    </div>
+    <script>
+        // 获取所有的.back�?
+        let backs=document.getElementsByClassName('back');
+        // 遍历所有的.back层，并添加span元素作为背景
+        for(let i=0;i<backs.length;i++){
+            // 当前�?back�?
+            let back=backs[i];
+            // 宽高尺寸采用.back层的1/25宽度
+            let width=back.clientWidth/25;
+            let height=width;
+            // 计算所需的背景块数量
+            let count=25*parseInt(back.clientHeight/height);
+            for(let j=0;j<count;j++){
+                // 根据计算结果并添加对应数量的span元素
+                let span=document.createElement('span');
+                span.style.width=width+'px';
+                span.style.height=width+'px';
+                // 设置动画过渡：时�?线�?动画延迟
+                span.style.transition='0.2s linear '+Math.random()/2+'s';
+                // 追加元素
+                back.appendChild(span);
+            }
+        }
+    </script>
+</body>
+
+</html>

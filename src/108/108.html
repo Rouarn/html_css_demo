@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+
+    <title>漂亮的导航栏动画效果</title>
+    <!-- 引入字体图标 -->
+    <link rel="stylesheet" href="/fonts/css/font-awesome.css">
+    <link rel="stylesheet" href="108.css">
+</head>
+
+<body>
+    <div class="tabbar">
+        <ul>
+            <li class="item active">
+                <a href="#">
+                    <span class="icon">
+                        <i class="fa fa-home" aria-hidden="true"></i>
+                    </span>
+                    <span class="text">首页</span>
+                </a>
+            </li>
+            <li class="item">
+                <a href="#">
+                    <span class="icon">
+                        <i class="fa fa-heart" aria-hidden="true"></i>
+                    </span>
+                    <span class="text">动�?/span>
+                </a>
+            </li>
+            <li class="item">
+                <a href="#">
+                    <span class="icon">
+                        <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                    </span>
+                    <span class="text">发布</span>
+                </a>
+            </li>
+            <li class="item">
+                <a href="#">
+                    <span class="icon">
+                        <i class="fa fa-bell" aria-hidden="true"></i>
+                    </span>
+                    <span class="text">消息</span>
+                </a>
+            </li>
+            <li class="item">
+                <a href="#">
+                    <span class="icon">
+                        <i class="fa fa-user" aria-hidden="true"></i>
+                    </span>
+                    <span class="text">我的</span>
+                </a>
+            </li>
+            <div class="active-bg"></div>
+        </ul>
+    </div>
+    <script>
+        // 获取所�?item元素
+        let items=document.querySelectorAll(".item");
+        // 设置当前选中项样式的方法
+        function setActive(){
+            // 遍历所�?item元素,移除active样式
+            items.forEach((item)=>{
+                item.classList.remove("active");
+            })
+            // 为当前选中项添加active样式
+            this.classList.add("active");
+        }
+        // 遍历所�?item元素,分别为其设置点击事件
+        items.forEach((item)=>{
+            item.addEventListener("click",setActive);
+        })
+    </script>
+</body>
+
+</html>

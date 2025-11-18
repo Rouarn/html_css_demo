@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>漂亮的导航栏动画效果</title>
+    <link rel="stylesheet" href="./260.css" />
+    <!-- 引入字体图标 -->
+    <link
+      href="https://cdn.bootcdn.net/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="tabbar">
+      <ul>
+        <li class="item active">
+          <a href="#">
+            <span class="icon">
+              <i class="fa fa-home" aria-hidden="true"></i>
+            </span>
+            <span class="text">首页</span>
+          </a>
+        </li>
+        <li class="item">
+          <a href="#">
+            <span class="icon">
+              <i class="fa fa-heart" aria-hidden="true"></i>
+            </span>
+            <span class="text">动�?/span>
+          </a>
+        </li>
+        <li class="item">
+          <a href="#">
+            <span class="icon">
+              <i class="fa fa-plus-circle" aria-hidden="true"></i>
+            </span>
+            <span class="text">发布</span>
+          </a>
+        </li>
+        <li class="item">
+          <a href="#">
+            <span class="icon">
+              <i class="fa fa-bell" aria-hidden="true"></i>
+            </span>
+            <span class="text">消息</span>
+          </a>
+        </li>
+        <li class="item">
+          <a href="#">
+            <span class="icon">
+              <i class="fa fa-user" aria-hidden="true"></i>
+            </span>
+            <span class="text">我的</span>
+          </a>
+        </li>
+        <div class="active-bg"></div>
+      </ul>
+    </div>
+    <script>
+      //获取所以的.item元素
+      let items = document.querySelectorAll(".item");
+      //设置当前选中样式的方�?
+      function setActive() {
+        // 遍历所�?item元素,移除active样式
+        items.forEach(item => {
+          item.classList.remove("active");
+        });
+        // 为当前选中项添加active样式
+        this.classList.add("active");
+      }
+      // 遍历所�?item元素,分别为其设置点击事件
+      items.forEach(item => {
+        item.addEventListener("click", setActive);
+      });
+    </script>
+  </body>
+</html>

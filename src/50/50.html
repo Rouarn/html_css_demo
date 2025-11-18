@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+
+    <title>不偷看密码的超萌猫头�?/title>
+    <link rel="stylesheet" href="./50.css">
+    <script src="../../public/js/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            $('#password').focus(function(){
+                // 密码框获得焦点，追加样式.password
+                $('#owl').addClass('password');
+            }).blur(function(){
+                // 密码框失去焦点，移除样式.password
+                $('#owl').removeClass('password');
+            })
+        })
+    </script>
+</head>
+
+<body>
+    <div class="login-box">
+        <div class="owl" id="owl">
+            <div class="hand"></div>
+            <div class="hand hand-r"></div>
+            <div class="arms">
+                <div class="arm"></div>
+                <div class="arm arm-r"></div>
+            </div>
+        </div>
+        <div class="input-box">
+            <input type="text" placeholder="账号">
+            <input type="password" placeholder="密码" id="password">
+            <button>登录</button>
+        </div>
+    </div>
+</body>
+
+</html>

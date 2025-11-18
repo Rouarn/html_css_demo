@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+
+    <title>高级感满满的滚轮视差相应效果</title>
+    <link rel="stylesheet" href="./52.css">
+</head>
+
+<body>
+    <h2>↓滚轮滚一下呗�?/h2>
+    <div class="bg">
+        <span>Hello</span>
+    </div>
+    <h1>欢迎来到<br>艾恩小灰灰的前端世界</h1>
+    <script type="text/javascript">
+        // 获取背景对象
+        const bg=document.querySelector(".bg");
+        // 监听滚轮事件
+        document.addEventListener("scroll",function(){
+            // 获取当前滚轮的位�?
+            const scrollY=window.scrollY;
+            if(scrollY!=0){
+                // 滚轮位置不等�?�?修改背景的定位加上滚轮的�?
+                bg.style.backgroundPosition="calc(50% + "+scrollY+"px) calc(50% + "+scrollY+"px)";
+            }else{
+                // 否则清空背景的定�?
+                bg.style.backgroundPosition="";
+            }
+        })
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+
+    <title>使用L2Dwidget实现二次元卡通看板娘</title>
+    <style type="text/css">
+        body {
+            background: linear-gradient(to top, #ff9a9e, #fecfef);
+        }
+    </style>
+</head>
+
+<body>
+
+</body>
+
+</html>
+
+<script src="./live2dw/lib/L2Dwidget.min.js"></script>
+<script>
+    function readTextFile(file, callback) {
+        var rawFile = new XMLHttpRequest();
+        rawFile.overrideMimeType("application/json");
+        rawFile.open("GET", file, true);
+        rawFile.onreadystatechange = function () {
+            if (rawFile.readyState === 4 && rawFile.status == "200") {
+                callback(rawFile.responseText);
+            }
+        }
+        rawFile.send(null);
+    }
+    var jsonData = null;
+    readTextFile("./live2dw/live2d-widget-model-shizuku/assets/shizuku.model.json", function (text) {
+        jsonData = JSON.parse(text);
+    })
+    
+    L2Dwidget.init({
+        model: {
+            // 模型
+            jsonPath: jsonData, //"./live2dw/live2d-widget-model-shizuku/assets/shizuku.model.json",
+            scale: 1 //模型缩放比例
+        },
+        display: {
+            position: "left", //模型的位置（左or右）
+            width: 300, //模型宽度
+            height: 600, //模型高度
+            hOffset: 0, //模型水平偏移�?
+            vOffset: -20 //模型垂直偏移�?
+        },
+        mobile: {
+            show: true, //手机端是否显�?
+            scale: 1 //缩放比例
+        },
+        react: {
+            opacity: 1 //模型不透明�?
+        }
+    })
+</script>
+
+<!-- L2Dwidget的官方配置文档看这里 -->
+<!-- https://l2dwidget.js.org/docs/class/src/index.js~L2Dwidget.html -->
