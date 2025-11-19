@@ -1,23 +1,25 @@
-*{
-    margin: 0;
-    padding: 0;
+* {
+  box-sizing: border-box;
 }
-.container{
-    overflow: auto;
-    position: absolute;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
+html,
+body {
+  height: 100%;
+  margin: 0;
 }
-.content{
-    /* 内容有多宽，盒子就有多宽 */
-    width: max-content;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    overflow-y: hidden;
+.container {
+  width: 100vw;
+  height: 100vh;
+  overflow-x: auto;
+  overflow-y: hidden;
 }
-.content img{
-    height: 640px;
+.content {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+}
+.content img {
+  height: 80vh;
+  object-fit: cover;
+  display: block;
 }

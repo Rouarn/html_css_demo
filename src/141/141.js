@@ -210,7 +210,7 @@ function selectTrack(flag) {
     // 当前歌曲信息(歌手 - 歌名)
     let cur_track_name = track_names[cur_index];
     // 设置音频路径
-    audio.src = "/audio/" + cur_album + ".mp3";
+    audio.src = "/public/audio/" + cur_album + ".mp3";
     if (flag != 0) {
       // 当切换上一首,下一首时,自动播放
       audio.play();

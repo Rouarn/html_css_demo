@@ -1,106 +1,128 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
 
-<head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-
-    <title>航海王都最终章�?重温一�?做一个路飞出海的动画特效</title>
-    <link rel="stylesheet" href="172.css">
+    <title>航海王都最终章重温一 做一个路飞出海的动画特效</title>
+    <link rel="stylesheet" href="./172.css" />
     <!-- 本案例用到了vue -->
-    <script src="/js/vue.min.js"></script>
-</head>
+    <script src="/public/js/vue.min.js"></script>
+  </head>
 
-<body>
+  <body>
     <div id="app">
-        <!-- �?-->
-        <div class="sea">
-            <div class="surface"></div>
-        </div>
-        <!-- �?-->
-        <div class="ship">
-            <div class="rotate">
-                <div class="move">
-                    <div class="body">
-                        <div class="waves">
-                            <!-- 船体波浪 -->
-                            <div class="bodywaves">
-                                <!-- --开头的是CSS自定义属�?这里随机生成指定区间的数值并赋值给自定义属�?而后会在CSS中通过var函数对其调用 -->
-                                <!-- 循环生成50个船体浪�?-->
-                                <div class="wave" v-for="i in 50" :style="{'--left':randomNum(12,60)+'px','--top':randomNum(-2,16)+'px','--delay':randomNum(30,4000)+'ms'}">
-                                    <div class="graphic" :style="{'--width':randomNum(9,18)+'px','--height':randomNum(9,18)+'px'}"></div>
-                                </div>
-                            </div>
-                            <!-- 左船桨波�?-->
-                            <div class="oarwaves left">
-                                <!-- 循环生成20个左船桨浪花 -->
-                                <div class="wave" v-for="i in 20" :style="{'--left':randomNum(40,50)+'px','--top':randomNum(-30,-15)+'px','--delay':randomNum(1000,1800)+'ms'}">
-                                    <div class="graphic" :style="{'--width':randomNum(6,10)+'px','--height':randomNum(6,10)+'px'}"></div>
-                                </div>
-                            </div>
-                            <!-- 右船桨波�?-->
-                            <div class="oarwaves right">
-                                <!-- 循环生成20个右船桨浪花 -->
-                                <div class="wave" v-for="i in 20" :style="{'--left':randomNum(40,50)+'px','--top':randomNum(40,55)+'px','--delay':randomNum(1000,1800)+'ms'}">
-                                    <div class="graphic" :style="{'--width':randomNum(6,10)+'px','--height':randomNum(6,10)+'px'}"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- 船体 -->
-                        <div class="base"></div>
-                        <!-- 前木�?-->
-                        <div class="board front"></div>
-                        <!-- 后木�?-->
-                        <div class="board back"></div>
-                    </div>
-                    <!-- 船桨 -->
-                    <div class="oars">
-                        <!-- 左船�?-->
-                        <div class="oar left">
-                            <div class="row left">
-                                <div class="depth left">
-                                    <div class="graphic left"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- 右船�?-->
-                        <div class="oar right">
-                            <div class="row right">
-                                <div class="depth right">
-                                    <div class="graphic right"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- 路飞 -->
-                    <div class="human">
-                        <div class="legs">
-                            <!-- 左腿 -->
-                            <div class="leg left"></div>
-                            <!-- 右腿 -->
-                            <div class="leg right"></div>
-                        </div>
-                        <!-- 帽子 -->
-                        <div class="hat"></div>
-                    </div>
+      <!-- 海-->
+      <div class="sea">
+        <div class="surface"></div>
+      </div>
+      <!-- 船-->
+      <div class="ship">
+        <div class="rotate">
+          <div class="move">
+            <div class="body">
+              <div class="waves">
+                <!-- 船体波浪 -->
+                <div class="bodywaves">
+                  <!-- --开头的是CSS自定义属性，这里随机生成指定区间的数值并赋值给自定义属性，而后会在CSS中通过var函数对其调用 -->
+                  <!-- 循环生成50个船体浪花 -->
+                  <div
+                    class="wave"
+                    v-for="i in 50"
+                    :style="{'--left':randomNum(12,60)+'px','--top':randomNum(-2,16)+'px','--delay':randomNum(30,4000)+'ms'}"
+                  >
+                    <div
+                      class="graphic"
+                      :style="{'--width':randomNum(9,18)+'px','--height':randomNum(9,18)+'px'}"
+                    ></div>
+                  </div>
                 </div>
+                <!-- 左船桨波浪 -->
+                <div class="oarwaves left">
+                  <!-- 循环生成20个左船桨浪花 -->
+                  <div
+                    class="wave"
+                    v-for="i in 20"
+                    :style="{'--left':randomNum(40,50)+'px','--top':randomNum(-30,-15)+'px','--delay':randomNum(1000,1800)+'ms'}"
+                  >
+                    <div
+                      class="graphic"
+                      :style="{'--width':randomNum(6,10)+'px','--height':randomNum(6,10)+'px'}"
+                    ></div>
+                  </div>
+                </div>
+                <!-- 右船桨波浪 -->
+                <div class="oarwaves right">
+                  <!-- 循环生成20个右船桨浪花 -->
+                  <div
+                    class="wave"
+                    v-for="i in 20"
+                    :style="{'--left':randomNum(40,50)+'px','--top':randomNum(40,55)+'px','--delay':randomNum(1000,1800)+'ms'}"
+                  >
+                    <div
+                      class="graphic"
+                      :style="{'--width':randomNum(6,10)+'px','--height':randomNum(6,10)+'px'}"
+                    ></div>
+                  </div>
+                </div>
+              </div>
+              <!-- 船体 -->
+              <div class="base"></div>
+              <!-- 前木板 -->
+              <div class="board front"></div>
+              <!-- 后木板 -->
+              <div class="board back"></div>
             </div>
+            <!-- 船桨 -->
+            <div class="oars">
+              <!-- 左船桨 -->
+              <div class="oar left">
+                <div class="row left">
+                  <div class="depth left">
+                    <div class="graphic left"></div>
+                  </div>
+                </div>
+              </div>
+              <!-- 右船桨 -->
+              <div class="oar right">
+                <div class="row right">
+                  <div class="depth right">
+                    <div class="graphic right"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- 路飞 -->
+            <div class="human">
+              <div class="legs">
+                <!-- 左腿 -->
+                <div class="leg left"></div>
+                <!-- 右腿 -->
+                <div class="leg right"></div>
+              </div>
+              <!-- 帽子 -->
+              <div class="hat"></div>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
-</body>
-
+  </body>
 </html>
 
 <script>
-    new Vue({
-        el:'#app',
-        data:{},
-        methods:{
-            // 生成指定范围随机�?保留小数点后两位)
-            randomNum(min,max){
-                var num=(Math.random()*(max-min+1)+min).toFixed(2);
-                return num;
-            }
-        }
-    })
+  new Vue({
+    el: "#app",
+    data: {},
+    methods: {
+      // 生成指定范围随机数(保留小数点后两位)
+      randomNum(min, max) {
+        var num = (Math.random() * (max - min + 1) + min).toFixed(2);
+        return num;
+      },
+    },
+  });
 </script>

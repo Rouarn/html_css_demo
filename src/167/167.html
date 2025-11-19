@@ -1,28 +1,17 @@
 <!DOCTYPE html>
-<html>
-
-<head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>鼠标滚轮水平滚动</title>
-    <link rel="stylesheet" href="167.css">
-</head>
-
-<body>
+    <link rel="stylesheet" href="./167.css" />
+  </head>
+  <body>
     <div class="container">
-        <div class="content">
-            <img src="/images/2.jpg" alt="">
-        </div>
+      <div class="content">
+        <img src="./image/2.jpg" alt="" />
+      </div>
     </div>
-</body>
-
+  </body>
+  <script src="./167.js"></script>
 </html>
-
-<!-- 引入水平滚动插件 -->
-<script src="horwheel.min.js"></script>
-<script>
-    const horwheel=require('horwheel');
-    const view=document.querySelector('.container');
-    horwheel(view);
-</script>

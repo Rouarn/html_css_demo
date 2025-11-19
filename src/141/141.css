@@ -23,7 +23,7 @@ body {
   right: -40px;
   bottom: -40px;
   left: -40px;
-  background: url(/audio/cover/红模仿.jpg) no-repeat;
+  background: url(/public/audio/cover/红模仿.jpg) no-repeat;
   background-size: cover;
   background-position: center;
   /* 模糊滤镜 */
