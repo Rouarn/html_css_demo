@@ -958,10 +958,11 @@
         { name: "背景渐变", url: "./src/315/315.html" },
         { name: "玻璃卡片悬停效果", url: "./src/316/316.html" },
         { name: "横向列表与自定义滚动条", url: "./src/317/317.html" },
+        { name: "虚拟列表/虚拟滚动", url: "./src/318/318.html" },
       ];
       $(function () {
         var theme = localStorage.getItem("pref-theme") || "modern";
-        var layout = localStorage.getItem("pref-layout") || "single";
+        var layout = localStorage.getItem("pref-layout") || "card";
         $("html").attr("data-theme", theme);
         $("html").attr("data-layout", layout);
         $("#themeSelect").val(theme);
