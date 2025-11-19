@@ -13,7 +13,7 @@ body {
   /*background-position属性设置背景图像的起始位置。*/
   /*设置如何平铺对象的 background-image 属性。*/
   /*background-image 不会重复*/
-  background: url("./346.jpeg") no-repeat center;
+  background: url("./image/346.jpeg") no-repeat center;
   /*background-size属性指定背景图片大小。*/
   /*cover	此时会保持图像的纵横比并将图像缩放成将完全覆盖背景定位区域的最小大小。*/
   background-size: cover;
