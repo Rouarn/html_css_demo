@@ -1,306 +1,628 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="modern" data-layout="single">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>项目导航</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <title>HTML/CSS 示例项目导航</title>
     <style>
       :root {
-        --primary: #4a90e2;
-        --accent: #9c6efb;
-        --bg-gradient: linear-gradient(135deg, #f4f7fb, #f9fcff);
-        --card-bg: #fff;
-        --shadow: rgba(0, 0, 0, 0.08);
-        --hover-shadow: rgba(0, 0, 0, 0.18);
-        --border: rgba(0, 0, 0, 0.05);
-        --highlight: rgba(74, 144, 226, 0.08);
-        --text: #222;
-        --text-light: #666;
-        --modal-bg: rgba(0, 0, 0, 0.75);
+        --font-sans: "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui,
+          -apple-system, sans-serif;
+        --font-serif: Georgia, "Times New Roman", serif;
+        --font-mono: Consolas, Menlo, monospace;
       }
-
+      html[data-theme="modern"] {
+        --bg: #f7f9fc;
+        --surface: #ffffff;
+        --text: #1d2128;
+        --muted: #5a6675;
+        --primary: #2563eb;
+        --accent: #9333ea;
+        --border: rgba(0, 0, 0, 0.08);
+        --shadow: rgba(0, 0, 0, 0.1);
+        --focus: #1e3a8a;
+        --icon-glow: 0 0 0 rgba(0, 0, 0, 0);
+        --font-body: var(--font-sans);
+        --font-title: var(--font-sans);
+        --bg-decor: radial-gradient(
+          closest-side,
+          color-mix(in srgb, var(--primary) 14%, transparent),
+          transparent 70%
+        );
+      }
+      html[data-theme="tech"] {
+        --bg: #0b0f14;
+        --surface: #121822;
+        --text: #e6e8ea;
+        --muted: #9aa4b2;
+        --primary: #00d1ff;
+        --accent: #7c4dff;
+        --border: rgba(255, 255, 255, 0.12);
+        --shadow: rgba(0, 0, 0, 0.6);
+        --focus: #00d1ff;
+        --icon-glow: 0 0 12px rgba(0, 209, 255, 0.6);
+        --font-body: var(--font-sans);
+        --font-title: var(--font-mono);
+        --bg-decor: radial-gradient(
+          closest-side,
+          color-mix(in srgb, var(--primary) 20%, transparent),
+          transparent 70%
+        );
+      }
+      html[data-theme="cozy"] {
+        --bg: #fdf6ec;
+        --surface: #ffffff;
+        --text: #2c2a26;
+        --muted: #6d6259;
+        --primary: #c2612c;
+        --accent: #f59e0b;
+        --border: rgba(0, 0, 0, 0.1);
+        --shadow: rgba(0, 0, 0, 0.08);
+        --focus: #8b4513;
+        --icon-glow: 0 0 0 rgba(0, 0, 0, 0);
+        --font-body: var(--font-sans);
+        --font-title: var(--font-serif);
+        --bg-decor: radial-gradient(
+          closest-side,
+          color-mix(in srgb, var(--accent) 22%, transparent),
+          transparent 70%
+        );
+      }
+      * {
+        box-sizing: border-box;
+      }
       body {
-        font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
-        background: var(--bg-gradient);
         margin: 0;
-        padding: 0;
         min-height: 100vh;
         color: var(--text);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+        background: var(--bg);
+        font-family: var(--font-body);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
       }
-
+      .skip-link {
+        position: absolute;
+        left: 8px;
+        top: -40px;
+        background: var(--surface);
+        color: var(--text);
+        padding: 8px 12px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        box-shadow: 0 6px 16px var(--shadow);
+        transition: top 0.2s ease;
+        z-index: 1000;
+      }
+      .skip-link:focus {
+        top: 8px;
+      }
       header {
-        width: 100%;
-        text-align: center;
         position: sticky;
         top: 0;
-        background: rgba(255, 255, 255, 0.85);
-        backdrop-filter: blur(10px);
-        box-shadow: 0 3px 10px var(--shadow);
-        z-index: 10;
-        padding: 1.5rem 0 1rem;
+        z-index: 20;
+        background: var(--surface);
+        backdrop-filter: saturate(160%) blur(8px);
         border-bottom: 1px solid var(--border);
       }
-
-      header h1 {
-        font-size: 2rem;
-        background: linear-gradient(90deg, var(--primary), var(--accent));
-        -webkit-background-clip: text;
-        background-clip: text;
-        color: transparent;
-        margin-bottom: 0.8rem;
-        font-weight: 700;
-        letter-spacing: 1px;
+      header::after {
+        content: "";
+        display: block;
+        height: 2px;
+        background: linear-gradient(
+          90deg,
+          color-mix(in srgb, var(--primary) 40%, transparent),
+          color-mix(in srgb, var(--accent) 40%, transparent)
+        );
+        opacity: 0.22;
       }
-
-      #search {
-        width: 60%;
-        max-width: 420px;
-        padding: 0.6rem 1rem;
-        border-radius: 9999px;
+      .bar {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: auto 1fr auto auto;
+        gap: 18px;
+        align-items: center;
+        padding: 16px 20px;
+      }
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 800;
+        letter-spacing: 0.3px;
+        color: var(--text);
+      }
+      .brand svg {
+        filter: var(--icon-glow);
+      }
+      .title {
+        font-family: var(--font-title);
+        font-size: 1.25rem;
+      }
+      .field {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
         border: 1px solid var(--border);
-        font-size: 1rem;
-        background: #fff;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        transition: all 0.25s ease;
+        border-radius: 999px;
+        background: var(--surface);
+        box-shadow: 0 2px 6px var(--shadow);
+      }
+      .field input[type="text"] {
+        width: clamp(220px, 36vw, 200px);
+        border: none;
         outline: none;
+        font-size: 0.98rem;
+        color: var(--text);
+        background: transparent;
       }
-
-      #search:focus {
-        border-color: var(--primary);
-        box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+      .selects {
+        display: inline-flex;
+        gap: 10px;
       }
-
+      .selects select {
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        padding: 8px 12px;
+        background: var(--surface);
+        color: var(--text);
+        box-shadow: 0 2px 6px var(--shadow);
+      }
+      .stats {
+        font-size: 0.85rem;
+        color: var(--muted);
+      }
       main {
         max-width: 1200px;
-        width: 100%;
-        padding: 2.5rem 2rem 4rem;
+        margin: 0 auto;
+        padding: 20px 16px 32px;
+      }
+      .layout {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-        gap: 1.8rem;
-        animation: fadeIn 0.8s ease forwards;
+        gap: 16px;
       }
-
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(10px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
+      html[data-layout="single"] .layout {
+        grid-template-columns: 1fr;
       }
-
-      /* 预览弹窗样式 */
-      .preview-modal {
+      html[data-layout="split"] .layout {
+        grid-template-columns: 280px 1fr;
+      }
+      .aside {
         display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: var(--modal-bg);
-        z-index: 100;
-        justify-content: center;
-        align-items: center;
-        opacity: 0;
-        transition: opacity 0.3s ease;
       }
-
+      html[data-layout="split"] .aside {
+        display: block;
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        background: color-mix(in srgb, var(--surface) 96%, var(--bg) 4%);
+        box-shadow: 0 8px 20px var(--shadow);
+        padding: 14px 12px;
+        position: sticky;
+        top: 76px;
+        height: fit-content;
+      }
+      .aside-title {
+        font-weight: 700;
+        color: var(--text);
+        margin-bottom: 8px;
+      }
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 8px;
+      }
+      .chip {
+        border: 1px solid var(--border);
+        background: var(--surface);
+        color: var(--text);
+        border-radius: 999px;
+        padding: 6px 10px;
+        font-size: 0.85rem;
+        cursor: pointer;
+      }
+      .chip.active,
+      .chip[aria-pressed="true"] {
+        color: #fff;
+        background: linear-gradient(135deg, var(--primary), var(--accent));
+        border-color: transparent;
+      }
+      .aside .mini-field {
+        margin-bottom: 8px;
+      }
+      .list {
+        display: grid;
+        gap: 20px;
+      }
+      html[data-layout="single"] .list {
+        grid-template-columns: 1fr;
+      }
+      html[data-layout="split"] .list {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      }
+      html[data-layout="card"] .list {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      }
+      .project-item {
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        background: var(--surface);
+        box-shadow: 0 8px 20px var(--shadow);
+        overflow: hidden;
+        position: relative;
+        transition: transform 0.22s ease, box-shadow 0.22s ease,
+          border-color 0.22s ease;
+      }
+      .project-item::before {
+        content: none;
+      }
+      .project-link::after {
+        content: none;
+      }
+      .project-link {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        gap: 10px 14px;
+        padding: 18px;
+        color: inherit;
+        text-decoration: none;
+      }
+      .project-item:focus-within,
+      .project-item:hover {
+        transform: translateY(-6px);
+        border-color: color-mix(in srgb, var(--primary) 60%, transparent);
+        box-shadow: 0 18px 36px var(--shadow);
+      }
+      .project-item:hover .project-number {
+        transform: scale(1.06);
+      }
+      .project-number {
+        transition: transform 0.22s ease;
+      }
+      .project-number {
+        align-self: start;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 26px;
+        height: 26px;
+        border-radius: 999px;
+        font-size: 0.85rem;
+        color: #fff;
+        background: linear-gradient(135deg, var(--primary), var(--accent));
+        box-shadow: 0 4px 10px
+          color-mix(in srgb, var(--primary) 30%, transparent);
+        backdrop-filter: saturate(120%) blur(6px);
+      }
+      .project-name {
+        font-weight: 700;
+        color: var(--text);
+      }
+      .project-tag {
+        justify-self: end;
+        align-self: start;
+        font-size: 0.75rem;
+        color: var(--primary);
+        background: color-mix(in srgb, var(--primary) 16%, transparent);
+        padding: 4px 10px;
+        border-radius: 999px;
+        box-shadow: 0 2px 6px
+          color-mix(in srgb, var(--primary) 20%, transparent);
+      }
+      .project-preview {
+        grid-column: 1 / -1;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.92rem;
+        color: var(--primary);
+        background: color-mix(in srgb, var(--primary) 10%, transparent);
+        padding: 6px 10px;
+        border-radius: 999px;
+      }
+      .project-preview:hover {
+        background: color-mix(in srgb, var(--primary) 16%, transparent);
+      }
+      .preview-modal {
+        position: fixed;
+        inset: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.75);
+        transition: opacity 0.25s ease;
+        opacity: 0;
+      }
       .preview-modal.active {
         display: flex;
         opacity: 1;
       }
-
       .preview-content {
-        background: white;
-        width: 90%;
-        max-width: 900px;
-        height: 80%;
-        border-radius: 12px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        position: relative;
+        width: min(920px, 92vw);
+        height: min(78vh, 760px);
+        background: var(--surface);
+        border-radius: 14px;
+        box-shadow: 0 12px 32px var(--shadow);
         overflow: hidden;
-        animation: modalFadeIn 0.4s ease forwards;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        transform: translateY(6px);
+        transition: transform 0.25s ease;
       }
-
-      @keyframes modalFadeIn {
-        from {
-          opacity: 0;
-          transform: scale(0.9);
-        }
-        to {
-          opacity: 1;
-          transform: scale(1);
-        }
+      .preview-modal.active .preview-content {
+        transform: translateY(0);
       }
-
+      .preview-info {
+        padding: 12px 16px;
+        border-bottom: 1px solid var(--border);
+        background: color-mix(in srgb, var(--surface) 94%, var(--bg) 6%);
+      }
+      .preview-title {
+        font-weight: 700;
+        color: var(--text);
+        margin-bottom: 4px;
+      }
+      .preview-url a {
+        font-size: 0.85rem;
+        color: var(--primary);
+        text-decoration: none;
+      }
+      .preview-url a:focus,
+      .preview-url a:hover {
+        text-decoration: underline;
+      }
       .preview-iframe {
+        flex: 1;
         width: 100%;
-        height: 100%;
         border: none;
       }
-
       .preview-close {
         position: absolute;
-        top: 15px;
-        right: 15px;
-        width: 30px;
-        height: 30px;
-        background: rgba(0, 0, 0, 0.6);
-        border-radius: 50%;
-        display: flex;
+        top: 12px;
+        right: 12px;
+        width: 32px;
+        height: 32px;
+        border-radius: 999px;
+        background: color-mix(in srgb, var(--text) 70%, transparent);
+        display: inline-flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        z-index: 10;
-        transition: background 0.2s ease;
       }
-
-      .preview-close:hover {
-        background: rgba(0, 0, 0, 0.8);
+      .preview-close svg {
+        stroke: #fff;
       }
-
-      .preview-close::before,
-      .preview-close::after {
-        content: "";
-        position: absolute;
-        width: 15px;
-        height: 2px;
-        background: white;
+      .preview-close:focus {
+        outline: 3px solid color-mix(in srgb, var(--primary) 40%, transparent);
       }
-
-      .preview-close::before {
-        transform: rotate(45deg);
-      }
-
-      .preview-close::after {
-        transform: rotate(-45deg);
-      }
-
-      .project-item {
-        background: var(--card-bg);
-        border-radius: 16px;
-        border: 1px solid var(--border);
-        box-shadow: 0 6px 16px var(--shadow);
-        transition: all 0.3s ease;
-        overflow: hidden;
-        position: relative;
-      }
-
-      .project-item::before {
-        content: "";
-        position: absolute;
-        bottom: 0;
-        left: -100%;
-        width: 100%;
-        height: 3px;
-        background: linear-gradient(90deg, var(--primary), var(--accent));
-        transition: all 0.4s ease;
-        opacity: 0;
-      }
-
-      .project-item:hover::before {
-        left: 0;
-        opacity: 1;
-      }
-
-      .project-item:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 10px 25px var(--hover-shadow);
-        border-color: var(--primary);
-      }
-
-      .project-link {
-        display: block;
-        padding: 1.5rem;
-        text-decoration: none;
-        color: inherit;
-      }
-
-      .project-name {
-        display: flex;
-        align-items: center;
-        font-size: 1.1rem;
-        font-weight: 600;
-        color: var(--primary);
-        margin-bottom: 0.5rem;
-      }
-
-      .project-number {
-        background: linear-gradient(135deg, var(--primary), var(--accent));
-        color: white;
-        border-radius: 50%;
-        width: 26px;
-        height: 26px;
-        font-size: 0.8rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-right: 10px;
-        box-shadow: 0 2px 6px rgba(74, 144, 226, 0.3);
-      }
-
-      .project-preview {
-        color: var(--text-light);
-        font-size: 0.9rem;
-        line-height: 1.4;
-        margin-bottom: 0.8rem;
-        min-height: 38px;
-      }
-
-      .project-tag {
-        background: var(--highlight);
-        color: var(--primary);
-        font-size: 0.75rem;
-        padding: 3px 8px;
-        border-radius: 8px;
-        display: inline-block;
-        font-weight: 500;
-      }
-
       footer {
         text-align: center;
+        color: var(--muted);
         font-size: 0.85rem;
-        color: #999;
-        padding: 1.5rem 0 3rem;
+        padding: 18px 0 32px;
       }
-
+      body::before {
+        content: "";
+        position: fixed;
+        inset: -20% -20% auto auto;
+        width: 42vw;
+        height: 42vw;
+        border-radius: 50%;
+        background: var(--bg-decor);
+        filter: blur(46px);
+        opacity: 0.38;
+        pointer-events: none;
+      }
+      body::after {
+        content: "";
+        position: fixed;
+        inset: auto auto -20% -20%;
+        width: 36vw;
+        height: 36vw;
+        border-radius: 50%;
+        background: radial-gradient(
+          closest-side,
+          color-mix(in srgb, var(--accent) 18%, transparent),
+          transparent 70%
+        );
+        filter: blur(40px);
+        opacity: 0.28;
+        pointer-events: none;
+      }
+      @media (max-width: 1024px) {
+        .bar {
+          grid-template-columns: auto 1fr auto;
+        }
+      }
       @media (max-width: 768px) {
-        #search {
-          width: 85%;
+        .bar {
+          grid-template-columns: 1fr;
+          gap: 8px;
         }
-        header h1 {
-          font-size: 1.7rem;
+        .selects {
+          justify-self: start;
         }
-        main {
-          padding: 1.5rem;
-          gap: 1rem;
+        html[data-layout="split"] .layout {
+          grid-template-columns: 1fr;
         }
+        html[data-layout="split"] .aside {
+          position: relative;
+          top: auto;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation: none !important;
+          transition: none !important;
+        }
+      }
+      :focus-visible {
+        outline: 3px solid var(--focus);
+        outline-offset: 2px;
       }
     </style>
   </head>
   <body>
-    <!-- 预览弹窗 -->
-    <div class="preview-modal" id="previewModal">
+    <a href="#main" class="skip-link">跳到主要内容</a>
+    <header>
+      <div class="bar" role="navigation" aria-label="页面工具栏">
+        <div class="brand" aria-label="站点标题">
+          <svg
+            width="26"
+            height="26"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+          >
+            <rect
+              x="3"
+              y="3"
+              width="18"
+              height="18"
+              rx="4"
+              stroke="var(--primary)"
+              stroke-width="2"
+            />
+            <path d="M7 12h10" stroke="var(--accent)" stroke-width="2" />
+          </svg>
+          <div class="title">HTML / CSS 示例项目导航</div>
+        </div>
+        <label class="field" for="search">
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden="true"
+          >
+            <circle
+              cx="11"
+              cy="11"
+              r="7"
+              stroke="var(--muted)"
+              stroke-width="2"
+            />
+            <path d="M20 20l-3.5-3.5" stroke="var(--muted)" stroke-width="2" />
+          </svg>
+          <input
+            id="search"
+            type="text"
+            placeholder="搜索项目名称"
+            aria-label="搜索项目名称"
+          />
+        </label>
+        <div class="selects" aria-label="外观设置">
+          <label>
+            <span class="sr-only">主题</span>
+            <select id="themeSelect" aria-label="选择主题">
+              <option value="modern">现代简约</option>
+              <option value="tech">科技感</option>
+              <option value="cozy">温馨风格</option>
+            </select>
+          </label>
+          <label>
+            <span class="sr-only">布局</span>
+            <select id="layoutSelect" aria-label="选择布局">
+              <option value="single">单栏</option>
+              <option value="split">分栏</option>
+              <option value="card">卡片式</option>
+            </select>
+          </label>
+        </div>
+        <div class="stats" id="resultCount" aria-live="polite"></div>
+      </div>
+    </header>
+    <main id="main">
+      <div class="layout">
+        <aside class="aside" aria-label="筛选工具">
+          <div class="aside-title">筛选</div>
+          <div
+            class="chips"
+            id="tagChips"
+            role="group"
+            aria-label="标签筛选"
+          ></div>
+          <div class="mini-field field">
+            <input
+              id="searchAside"
+              type="text"
+              placeholder="筛选关键词"
+              aria-label="筛选关键词"
+            />
+          </div>
+          <div class="stats" id="asideCount"></div>
+          <button
+            id="clearSearch"
+            style="
+              margin-top: 8px;
+              display: block;
+              width: 100%;
+              padding: 8px 12px;
+              border-radius: 999px;
+              border: 1px solid var(--border);
+              background: var(--surface);
+              color: var(--text);
+              cursor: pointer;
+            "
+            aria-label="清除筛选"
+          >
+            清除筛选
+          </button>
+        </aside>
+        <div
+          class="list"
+          id="project-list"
+          role="list"
+          aria-label="项目列表"
+        ></div>
+      </div>
+    </main>
+    <div
+      class="preview-modal"
+      id="previewModal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="previewTitle"
+    >
       <div class="preview-content">
-        <div class="preview-close" id="previewClose"></div>
-        <iframe class="preview-iframe" id="previewFrame" src=""></iframe>
+        <button class="preview-close" id="previewClose" aria-label="关闭预览">
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path d="M6 6l12 12M18 6L6 18" stroke-width="2" />
+          </svg>
+        </button>
+        <div class="preview-info">
+          <div class="preview-title" id="previewTitle"></div>
+          <div class="preview-url">
+            <a
+              id="previewLink"
+              href=""
+              target="_blank"
+              rel="noopener noreferrer"
+            ></a>
+          </div>
+        </div>
+        <iframe
+          class="preview-iframe"
+          id="previewFrame"
+          src=""
+          title="项目预览"
+        ></iframe>
       </div>
     </div>
-
-    <header>
-      <h1>HTML / CSS 实例项目导航</h1>
-      <input id="search" type="text" placeholder="🔍 搜索项目名称..." />
-    </header>
-
-    <main id="project"></main>
-
+    <footer>遵循 WCAG 2.1 AA</footer>
+    <script src="./public/js/jquery-3.6.0.min.js"></script>
     <script>
-      let projectList = [
+      var projectList = [
         { name: "简单又令人惊艳的hover效果表单案例", url: "./src/1/1.html" },
         { name: "3D旋转卡片", url: "./src/2/2.html" },
         { name: "伸缩式导航栏", url: "./src/3/3.html" },
@@ -637,81 +959,195 @@
         { name: "玻璃卡片悬停效果", url: "./src/316/316.html" },
         { name: "横向列表与自定义滚动条", url: "./src/317/317.html" },
       ];
-
-      const container = document.getElementById("project");
-
-      function render(list) {
-        container.innerHTML = list
-          .map(
-            (item, i) => `
-          <div class="project-item">
-            <a href="${
-              item.url
-            }" class="project-link" target="_blank" data-preview-url="${
-              item.url
-            }">
-              <div class="project-name">
-                <span class="project-number">${i + 1}</span>${item.name}
-              </div>
-              <div class="project-preview" data-preview="true">点击查看效果演示</div>
-              <span class="project-tag">CSS效果</span>
-            </a>
-          </div>
-        `
-          )
-          .join("");
-      }
-
-      render(projectList);
-
-      // 弹窗预览功能
-      const previewModal = document.getElementById("previewModal");
-      const previewFrame = document.getElementById("previewFrame");
-      const previewClose = document.getElementById("previewClose");
-
-      // 关闭预览弹窗
-      previewClose.addEventListener("click", () => {
-        previewModal.classList.remove("active");
-        previewFrame.src = "";
-      });
-
-      // 点击弹窗外部区域关闭弹窗
-      previewModal.addEventListener("click", e => {
-        if (e.target === previewModal) {
-          previewModal.classList.remove("active");
-          previewFrame.src = "";
+      $(function () {
+        var theme = localStorage.getItem("pref-theme") || "modern";
+        var layout = localStorage.getItem("pref-layout") || "single";
+        $("html").attr("data-theme", theme);
+        $("html").attr("data-layout", layout);
+        $("#themeSelect").val(theme);
+        $("#layoutSelect").val(layout);
+        function getTag(name) {
+          var n = name.toLowerCase();
+          if (/导航|菜单|tab|侧边|搜索/.test(n)) return "导航";
+          if (/加载|loading|进度|等待/.test(n)) return "加载";
+          if (/轮播|焦点图|切换|滚动/.test(n)) return "轮播";
+          if (/3d|立方|分层|标签云/.test(n)) return "3D";
+          if (/登录|注册|表单/.test(n)) return "登录";
+          if (/按钮|开关|悬停|hover/.test(n)) return "按钮";
+          if (/卡片|相册|人物/.test(n)) return "卡片";
+          if (/文字|字体|打字|特效/.test(n)) return "文字";
+          return "HTML/CSS";
         }
-      });
-
-      // 委托事件处理，处理项目预览点
-      document.addEventListener("click", e => {
-        // 如果点击的是预览按钮
-        if (e.target.closest("[data-preview='true']")) {
-          e.preventDefault();
-          const link = e.target.closest(".project-link");
-          const previewUrl = link.getAttribute("data-preview-url");
-
-          // 打开预览弹窗
-          previewFrame.src = previewUrl;
-          previewModal.classList.add("active");
-          return false;
+        function renderProjects(list) {
+          var $container = $("#project-list");
+          $container.empty();
+          var batch = 80;
+          var i = 0;
+          var total = list.length;
+          $("#resultCount").text(total + " 个结果");
+          $("#asideCount").text("结果数量：" + total);
+          function renderChunk() {
+            var end = Math.min(i + batch, total);
+            var html = "";
+            for (; i < end; i++) {
+              var item = list[i];
+              var tag = getTag(item.name);
+              html +=
+                '<div class="project-item" role="listitem">' +
+                '<a href="' +
+                item.url +
+                '" class="project-link" target="_blank" rel="noopener" data-preview-url="' +
+                item.url +
+                '" aria-label="' +
+                item.name +
+                '">' +
+                '<span class="project-number">' +
+                (i + 1) +
+                "</span>" +
+                '<div class="project-name">' +
+                item.name +
+                "</div>" +
+                '<span class="project-tag">' +
+                tag +
+                "</span>" +
+                '<div class="project-preview" data-preview="true">预览 ↗</div>' +
+                "</a>" +
+                "</div>";
+            }
+            $container.append(html);
+            if (i < total) {
+              requestAnimationFrame(renderChunk);
+            }
+          }
+          requestAnimationFrame(renderChunk);
         }
-      });
-
-      document.getElementById("search").addEventListener("input", e => {
-        const kw = e.target.value.toLowerCase().trim();
-        const filtered = projectList.filter(p =>
-          p.name.toLowerCase().includes(kw)
-        );
-        render(filtered);
-      });
-
-      // 点击 Esc 关闭弹窗
-      document.addEventListener("keydown", e => {
-        if (e.key === "Escape" && previewModal.classList.contains("active")) {
-          previewModal.classList.remove("active");
-          previewFrame.src = "";
+        var currentTag = "全部";
+        var tags = [
+          "全部",
+          "导航",
+          "加载",
+          "轮播",
+          "3D",
+          "登录",
+          "按钮",
+          "卡片",
+          "文字",
+        ];
+        var $chips = $("#tagChips");
+        function renderChips() {
+          var html = tags
+            .map(function (t) {
+              var pressed = t === currentTag ? "true" : "false";
+              return (
+                '<button class="chip' +
+                (t === currentTag ? " active" : "") +
+                '" data-tag="' +
+                t +
+                '" aria-pressed="' +
+                pressed +
+                '">' +
+                t +
+                "</button>"
+              );
+            })
+            .join("");
+          $chips.html(html);
         }
+        function applyFilter() {
+          var kw = ($("#search").val() || $("#searchAside").val() || "")
+            .toLowerCase()
+            .trim();
+          var filtered = projectList.filter(function (p) {
+            var matchKw = kw ? p.name.toLowerCase().includes(kw) : true;
+            var tag = getTag(p.name);
+            var matchTag = currentTag === "全部" ? true : tag === currentTag;
+            return matchKw && matchTag;
+          });
+          renderProjects(filtered);
+        }
+        renderChips();
+        renderProjects(projectList);
+        $(document).on("click", "#tagChips .chip", function () {
+          currentTag = $(this).data("tag");
+          renderChips();
+          applyFilter();
+        });
+        $("#search, #searchAside").on("input", function () {
+          applyFilter();
+        });
+        $("#clearSearch").on("click", function () {
+          $("#search").val("");
+          $("#searchAside").val("");
+          currentTag = "全部";
+          renderChips();
+          applyFilter();
+        });
+        $("#themeSelect").on("change", function () {
+          var v = $(this).val();
+          $("html").attr("data-theme", v);
+          localStorage.setItem("pref-theme", v);
+        });
+        $("#layoutSelect").on("change", function () {
+          var v = $(this).val();
+          $("html").attr("data-layout", v);
+          localStorage.setItem("pref-layout", v);
+        });
+        var $modal = $("#previewModal");
+        var $frame = $("#previewFrame");
+        var $close = $("#previewClose");
+        var $title = $("#previewTitle");
+        var $link = $("#previewLink");
+        var lastFocus = null;
+        $(document).on("click", function (e) {
+          var $t = $(e.target);
+          if ($t.closest('[data-preview="true"]').length) {
+            e.preventDefault();
+            var $linkEl = $t.closest(".project-link");
+            var url = $linkEl.attr("data-preview-url");
+            var txt = $linkEl.find(".project-name").text().trim() || url;
+            lastFocus = $(document.activeElement);
+            $title.text(txt);
+            $link.attr("href", url).text(url);
+            $frame.attr("src", url);
+            $modal.addClass("active").attr("aria-hidden", "false");
+            $close.focus();
+            return false;
+          }
+        });
+        $close.on("click", function () {
+          $modal.removeClass("active").attr("aria-hidden", "true");
+          $frame.attr("src", "");
+          $title.text("");
+          $link.removeAttr("href").text("");
+          if (lastFocus && lastFocus.length) {
+            lastFocus.focus();
+          }
+        });
+        $modal.on("click", function (e) {
+          if (e.target === this) {
+            $close.trigger("click");
+          }
+        });
+        $(document).on("keydown", function (e) {
+          if (e.key === "Escape" && $modal.hasClass("active")) {
+            $close.trigger("click");
+          }
+          if (e.key === "Tab" && $modal.hasClass("active")) {
+            var focusables = [$close[0], $link[0]];
+            var idx = focusables.indexOf(document.activeElement);
+            if (e.shiftKey) {
+              if (idx <= 0) {
+                e.preventDefault();
+                focusables[focusables.length - 1].focus();
+              }
+            } else {
+              if (idx >= focusables.length - 1) {
+                e.preventDefault();
+                focusables[0].focus();
+              }
+            }
+          }
+        });
       });
     </script>
   </body>
